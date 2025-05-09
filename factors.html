@@ -329,13 +329,39 @@
     .sidebar-overlay.active {
       display: block;
     }
+
+    /* Loading spinner */
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: #5D5CDE;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .research-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .research-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark .research-card:hover {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
   </style>
 </head>
 
 <body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300">
-
-  <
-
   <div class="min-h-screen flex flex-col">
     <!-- Mobile Sidebar Toggle -->
     <button id="sidebarToggle" class="fixed top-4 left-4 z-20 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-md md:hidden">
@@ -356,17 +382,12 @@
       <nav class="p-4">
         <ul class="space-y-2">
           <li>
-            <a href="index.html" class="nav-link active flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            <a href="index.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
               <i class="fas fa-chart-line mr-3"></i>
               <span>Dashboard</span>
             </a>
           </li>
-          <li>
-            <a href="monitoring.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-              <i class="fas fa-users mr-3"></i>
-              <span>Employee Monitoring</span>
-            </a>
-          </li>
+          
           <li>
             <a href="analytics.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
               <i class="fas fa-chart-pie mr-3"></i>
@@ -374,7 +395,7 @@
             </a>
           </li>
           <li>
-            <a href="factors.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            <a href="factors.html" class="nav-link active flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
               <i class="fas fa-brain mr-3"></i>
               <span>Psychosocial Factors</span>
             </a>
@@ -401,283 +422,508 @@
       </nav>
     </div>
 
-  <main class="flex-grow container mx-auto px-4 py-6">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-      <div>
-        <h2 class="text-2xl font-bold">Psychosocial Factors</h2>
-        <p class="text-gray-600 dark:text-gray-400">Understanding motivations behind fraudulent behavior</p>
-      </div>
-    </div>
-
-    <!-- Key Psychosocial Factors -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-4">Primary Motivators</h3>
-        <div class="h-64">
-          <canvas id="motivatorsChart"></canvas>
-        </div>
-      </div>
-      
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-4">Feeling Undervalued Impact</h3>
-        <div class="h-64">
-          <canvas id="undervaluedChart"></canvas>
-        </div>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-4">
-          73.8% of respondents believe employees who feel undervalued are more likely to commit fraud
-        </p>
-      </div>
-      
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-4">Organizational Culture</h3>
-        <div class="h-64">
-          <canvas id="cultureChart"></canvas>
-        </div>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-4">
-          71.4% rate their organizational culture as Average in ethical standards
-        </p>
-      </div>
-    </div>
-
-    <!-- Psychosocial Factor Analysis -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-      <h3 class="text-lg font-semibold mb-4">Psychosocial Factor Analysis</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <main class="flex-grow container mx-auto px-4 py-6 md:ml-64">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h4 class="font-medium mb-3">Financial Pressure (69.8%)</h4>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">
-            Employees facing financial difficulties are most likely to engage in fraudulent activities, 
-            especially when combined with opportunity and rationalization (Fraud Triangle theory).
-          </p>
-          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-            <p class="font-medium mb-2">Detection Indicators:</p>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>Sudden changes in spending habits</li>
-              <li>Frequent financial complaints</li>
-              <li>Multiple loans or debts</li>
-              <li>Gambling activities</li>
-            </ul>
+          <h2 class="text-2xl font-bold">Psychosocial Factors</h2>
+          <p class="text-gray-600 dark:text-gray-400">Understanding motivations behind fraudulent behavior</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button id="fetchResearchBtn" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fas fa-sync-alt mr-2"></i> Fetch Latest Research
+          </button>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-white dark:bg-gray-800 shadow">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div id="loadingIndicator" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl text-center">
+          <div class="spinner"></div>
+          <p class="mt-4">Fetching latest psychosocial research data...</p>
+        </div>
+      </div>
+
+      <!-- Research Articles Section -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">Latest Research on Psychosocial Factors</h3>
+          <div class="relative">
+            <select id="researchFilter" class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-primary focus:border-primary block p-2">
+              <option value="all">All Topics</option>
+              <option value="motivation">Motivation</option>
+              <option value="stress">Stress</option>
+              <option value="culture">Organizational Culture</option>
+              <option value="financial">Financial Pressure</option>
+            </select>
           </div>
         </div>
-        <div>
-          <h4 class="font-medium mb-3">Feeling Undervalued (45.2% strongly agree)</h4>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">
-            Employees who feel unrecognized or unfairly treated are more likely to rationalize fraudulent behavior 
-            as "getting what they deserve" (Equity Theory).
-          </p>
-          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-            <p class="font-medium mb-2">Detection Indicators:</p>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>Negative attitude towards management</li>
-              <li>Frequent complaints about fairness</li>
-              <li>Decline in work quality</li>
-              <li>Social withdrawal</li>
-            </ul>
+        
+        <div id="researchResults" class="space-y-4">
+          <!-- Research cards will be inserted here -->
+          <div class="text-center py-10 text-gray-500">
+            <i class="fas fa-search fa-2x mb-3"></i>
+            <p>Click "Fetch Latest Research" to load recent studies on psychosocial factors in fraud</p>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Theoretical Frameworks -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-      <h3 class="text-lg font-semibold mb-4">Theoretical Frameworks</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="psycho-card bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-          <h4 class="font-bold mb-2">Fraud Triangle Theory</h4>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-            Pressure (financial or otherwise), Opportunity, and Rationalization combine to create fraud risk.
-          </p>
-          <div class="flex flex-wrap gap-1">
-            <span class="behavior-tag behavior-financial">Pressure</span>
-            <span class="behavior-tag behavior-secrecy">Opportunity</span>
-            <span class="behavior-tag behavior-vacation">Rationalization</span>
+      <!-- Key Psychosocial Factors -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Primary Motivators</h3>
+          <div class="h-64">
+            <canvas id="motivatorsChart"></canvas>
           </div>
         </div>
-        <div class="psycho-card bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-          <h4 class="font-bold mb-2">Social Learning Theory</h4>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-            Employees learn behaviors by observing others, especially when unethical behavior goes unpunished.
-          </p>
-          <div class="flex flex-wrap gap-1">
-            <span class="behavior-tag behavior-lifestyle">Observation</span>
-            <span class="behavior-tag behavior-reporting">Imitation</span>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Feeling Undervalued Impact</h3>
+          <div class="h-64">
+            <canvas id="undervaluedChart"></canvas>
           </div>
-        </div>
-        <div class="psycho-card bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-          <h4 class="font-bold mb-2">Maslow's Hierarchy</h4>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-            Unmet needs (especially financial security) can drive unethical behavior to satisfy those needs.
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-4">
+            73.8% of respondents believe employees who feel undervalued are more likely to commit fraud
           </p>
-          <div class="flex flex-wrap gap-1">
-            <span class="behavior-tag behavior-financial">Physiological</span>
-            <span class="behavior-tag behavior-lifestyle">Safety</span>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Organizational Culture</h3>
+          <div class="h-64">
+            <canvas id="cultureChart"></canvas>
+          </div>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-4">
+            71.4% rate their organizational culture as Average in ethical standards
+          </p>
+        </div>
+      </div>
+
+      <!-- Psychosocial Factor Analysis -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+        <h3 class="text-lg font-semibold mb-4">Psychosocial Factor Analysis</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 class="font-medium mb-3">Financial Pressure (69.8%)</h4>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              Employees facing financial difficulties are most likely to engage in fraudulent activities, 
+              especially when combined with opportunity and rationalization (Fraud Triangle theory).
+            </p>
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <p class="font-medium mb-2">Detection Indicators:</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Sudden changes in spending habits</li>
+                <li>Frequent financial complaints</li>
+                <li>Multiple loans or debts</li>
+                <li>Gambling activities</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-medium mb-3">Feeling Undervalued (45.2% strongly agree)</h4>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              Employees who feel unrecognized or unfairly treated are more likely to rationalize fraudulent behavior 
+              as "getting what they deserve" (Equity Theory).
+            </p>
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <p class="font-medium mb-2">Detection Indicators:</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Negative attitude towards management</li>
+                <li>Frequent complaints about fairness</li>
+                <li>Decline in work quality</li>
+                <li>Social withdrawal</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </main>
 
-  <!-- Same footer as dashboard.html -->
+      <!-- Theoretical Frameworks -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold mb-4">Theoretical Frameworks</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="psycho-card bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+            <h4 class="font-bold mb-2">Fraud Triangle Theory</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+              Pressure (financial or otherwise), Opportunity, and Rationalization combine to create fraud risk.
+            </p>
+            <div class="flex flex-wrap gap-1">
+              <span class="behavior-tag behavior-financial">Pressure</span>
+              <span class="behavior-tag behavior-secrecy">Opportunity</span>
+              <span class="behavior-tag behavior-vacation">Rationalization</span>
+            </div>
+          </div>
+          <div class="psycho-card bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+            <h4 class="font-bold mb-2">Social Learning Theory</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+              Employees learn behaviors by observing others, especially when unethical behavior goes unpunished.
+            </p>
+            <div class="flex flex-wrap gap-1">
+              <span class="behavior-tag behavior-lifestyle">Observation</span>
+              <span class="behavior-tag behavior-reporting">Imitation</span>
+            </div>
+          </div>
+          <div class="psycho-card bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+            <h4 class="font-bold mb-2">Maslow's Hierarchy</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+              Unmet needs (especially financial security) can drive unethical behavior to satisfy those needs.
+            </p>
+            <div class="flex flex-wrap gap-1">
+              <span class="behavior-tag behavior-financial">Physiological</span>
+              <span class="behavior-tag behavior-lifestyle">Safety</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-4 md:ml-64">
+      <div class="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400 text-sm">
+        <p>© 2023 Fraud Detection System. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
 
   <script>
-   document.addEventListener('DOMContentLoaded', () => {
-       
-  
-        // Theme toggle
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-          document.documentElement.classList.toggle('dark');
-          localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-        });
-  
-        // Initialize theme from localStorage
-        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        }
-  
-        // Dropdowns
-        document.querySelectorAll('.dropdown-btn').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const panelId = this.id.replace('Dropdown', 'Panel');
-            const panel = document.getElementById(panelId);
-            panel.classList.toggle('hidden');
-          });
-        });
-  
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', (e) => {
-          if (!e.target.closest('.relative')) {
-            document.querySelectorAll('.dropdown-panel').forEach(panel => {
-              panel.classList.add('hidden');
-            });
-          }
-        });
-  
-        // Employee details toggle
-        document.querySelectorAll('.view-details-btn').forEach(button => {
-          button.addEventListener('click', function() {
-            const employee = this.dataset.employee;
-            const detailsRow = document.getElementById(`${employee}-details`);
-            detailsRow.classList.toggle('active');
-          });
-        });
-  
-        // Department tabs
-        document.querySelectorAll('.tab-btn').forEach(tab => {
-          tab.addEventListener('click', function() {
-            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            // Here you would filter the table by department
-          });
-        });
-  
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-          authModal.classList.add('active');
-          body.classList.add('modal-open');
-          showToast('You have been logged out', 'info');
-        });
-  
-        // Mark all alerts as read
-        document.getElementById('markAllRead').addEventListener('click', () => {
-          document.getElementById('alertCount').textContent = '0';
-          showToast('All alerts marked as read', 'success');
-        });
-  
-        // Sidebar toggle for mobile
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        
-        sidebarToggle.addEventListener('click', () => {
-          sidebar.classList.toggle('active');
-          sidebarOverlay.classList.toggle('active');
-        });
-        
-        sidebarOverlay.addEventListener('click', () => {
-          sidebar.classList.remove('active');
-          sidebarOverlay.classList.remove('active');
-        });
-  
-        // Initialize charts
-        initCharts();
-  
-        // Show authentication modal on page load
-        authModal.classList.add('active');
-        body.classList.add('modal-open');
+    document.addEventListener('DOMContentLoaded', () => {
+      // Theme toggle
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
       });
-  
-      function initCharts() {
-        // Behavioral Patterns Chart
-        const behaviorCtx = document.getElementById('behaviorChart').getContext('2d');
-        new Chart(behaviorCtx, {
-          type: 'doughnut',
-          data: {
-            labels: ['Financial Discrepancies', 'Lifestyle Changes', 'Work Secrecy', 'Vacation Avoidance', 'Reporting Issues'],
-            datasets: [{
-              data: [32.6, 74.4, 76.7, 58.1, 41.9],
-              backgroundColor: [
-                '#3B82F6',
-                '#8B5CF6',
-                '#EC4899',
-                '#14B8A6',
-                '#F97316'
-              ],
-              borderWidth: 0
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'right',
-                labels: {
-                  usePointStyle: true,
-                  padding: 20
+
+      // Initialize theme from localStorage
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+
+      // Sidebar toggle for mobile
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
+      });
+      
+      sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+      });
+
+      // Initialize charts
+      initCharts();
+
+      // Fetch research button
+      document.getElementById('fetchResearchBtn').addEventListener('click', fetchPsychosocialResearch);
+
+      // Research filter
+      document.getElementById('researchFilter').addEventListener('change', filterResearchArticles);
+    });
+
+    function initCharts() {
+      // Motivators Chart
+      const motivatorsCtx = document.getElementById('motivatorsChart').getContext('2d');
+      new Chart(motivatorsCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Financial', 'Recognition', 'Work Pressure', 'Personal Issues', 'Revenge'],
+          datasets: [{
+            label: 'Percentage',
+            data: [65, 42, 38, 29, 17],
+            backgroundColor: [
+              '#3B82F6',
+              '#8B5CF6',
+              '#EC4899',
+              '#14B8A6',
+              '#F97316'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
                 }
               }
-            },
-            cutout: '70%'
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
           }
-        });
+        }
+      });
+
+      // Undervalued Chart
+      const undervaluedCtx = document.getElementById('undervaluedChart').getContext('2d');
+      new Chart(undervaluedCtx, {
+        type: 'pie',
+        data: {
+          labels: ['Strongly Agree', 'Agree', 'Neutral', 'Disagree', 'Strongly Disagree'],
+          datasets: [{
+            data: [45.2, 28.6, 15.4, 7.1, 3.7],
+            backgroundColor: [
+              '#EF4444',
+              '#F59E0B',
+              '#E5E7EB',
+              '#10B981',
+              '#3B82F6'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                usePointStyle: true,
+                padding: 20
+              }
+            }
+          },
+          cutout: '60%'
+        }
+      });
+
+      // Culture Chart
+      const cultureCtx = document.getElementById('cultureChart').getContext('2d');
+      new Chart(cultureCtx, {
+        type: 'radar',
+        data: {
+          labels: ['Ethical Standards', 'Leadership Example', 'Accountability', 'Transparency', 'Fairness'],
+          datasets: [{
+            label: 'Current',
+            data: [71.4, 64.3, 59.5, 52.4, 66.7],
+            backgroundColor: 'rgba(93, 92, 222, 0.2)',
+            borderColor: '#5D5CDE',
+            borderWidth: 2,
+            pointBackgroundColor: '#5D5CDE',
+            pointBorderColor: '#fff',
+            pointHoverRadius: 5
+          }, {
+            label: 'Ideal',
+            data: [95.2, 90.5, 88.1, 85.7, 92.9],
+            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+            borderColor: '#10B981',
+            borderWidth: 2,
+            pointBackgroundColor: '#10B981',
+            pointBorderColor: '#fff',
+            pointHoverRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: {
+                display: true
+              },
+              suggestedMin: 0,
+              suggestedMax: 100
+            }
+          }
+        }
+      });
+    }
+
+    // Fetch psychosocial research from the internet
+    async function fetchPsychosocialResearch() {
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      const researchResults = document.getElementById('researchResults');
+      
+      try {
+        // Show loading indicator
+        loadingIndicator.classList.remove('hidden');
+        researchResults.innerHTML = '';
+        
+        // In a real application, you would call your backend API here
+        // For demonstration, we'll simulate an API call with mock data
+        // and a slight delay to show the loading state
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Mock data - in a real app, this would come from your API
+        const mockResearchData = [
+          {
+            id: 1,
+            title: "The Role of Financial Stress in Employee Fraud",
+            source: "Journal of Financial Crime",
+            summary: "This study examines how financial pressures can lead otherwise honest employees to commit fraud, with a focus on the Fraud Triangle theory.",
+            url: "https://www.emerald.com/insight/content/doi/10.1108/JFC-03-2023-0057/full/html",
+            date: "2023-05-15",
+            topics: ["financial", "motivation"]
+          },
+          {
+            id: 2,
+            title: "Organizational Culture and Ethical Decision Making",
+            source: "Harvard Business Review",
+            summary: "Research on how company culture influences employee behavior and the likelihood of unethical actions when certain psychosocial factors are present.",
+            url: "https://hbr.org/2023/04/organizational-culture-and-ethical-decision-making",
+            date: "2023-04-22",
+            topics: ["culture"]
+          },
+          {
+            id: 3,
+            title: "Psychological Triggers of Fraudulent Behavior in the Workplace",
+            source: "American Psychological Association",
+            summary: "A comprehensive analysis of the psychological factors that contribute to fraud, including stress, perceived injustice, and rationalization.",
+            url: "https://www.apa.org/pubs/journals/releases/amp-a0038901.pdf",
+            date: "2023-03-10",
+            topics: ["stress", "motivation"]
+          },
+          {
+            id: 4,
+            title: "The Impact of Job Satisfaction on Fraud Risk",
+            source: "Journal of Business Ethics",
+            summary: "Longitudinal study showing correlation between employee dissatisfaction and increased likelihood of fraudulent activities.",
+            url: "https://link.springer.com/article/10.1007/s10551-023-05395-z",
+            date: "2023-02-28",
+            topics: ["motivation"]
+          },
+          {
+            id: 5,
+            title: "Financial Fraud and Mental Health: The Hidden Connection",
+            source: "Psychology Today",
+            summary: "Explores how mental health issues and financial stress can create a perfect storm for fraudulent behavior.",
+            url: "https://www.psychologytoday.com/us/blog/money-and-the-mind/202301/financial-fraud-and-mental-health-the-hidden-connection",
+            date: "2023-01-15",
+            topics: ["financial", "stress"]
+          }
+        ];
+        
+        // Display the research articles
+        displayResearchArticles(mockResearchData);
+        
+        // Show success message
+        showToast('Successfully fetched latest research articles', 'success');
+      } catch (error) {
+        console.error('Error fetching research:', error);
+        showToast('Failed to fetch research data. Please try again.', 'error');
+      } finally {
+        loadingIndicator.classList.add('hidden');
       }
-  
-      function showToast(message, type = 'info') {
-        const toastContainer = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 flex items-start border-l-4 ${
-          type === 'success' ? 'border-green-500' : 
-          type === 'error' ? 'border-red-500' : 
-          type === 'warning' ? 'border-yellow-500' : 'border-blue-500'
-        }`;
-        
-        let icon;
-        if (type === 'success') icon = 'fa-check-circle text-green-500';
-        else if (type === 'error') icon = 'fa-exclamation-circle text-red-500';
-        else if (type === 'warning') icon = 'fa-exclamation-triangle text-yellow-500';
-        else icon = 'fa-info-circle text-blue-500';
-        
-        toast.innerHTML = `
-          <i class="fas ${icon} mr-3 mt-1"></i>
-          <div class="flex-1">
-            <p class="text-sm font-medium">${message}</p>
+    }
+
+    // Display research articles in the UI
+    function displayResearchArticles(articles) {
+      const researchResults = document.getElementById('researchResults');
+      
+      if (articles.length === 0) {
+        researchResults.innerHTML = `
+          <div class="text-center py-10 text-gray-500">
+            <i class="fas fa-exclamation-circle fa-2x mb-3"></i>
+            <p>No research articles found matching your criteria</p>
           </div>
-          <button class="ml-4 text-gray-400 hover:text-gray-500">
-            <i class="fas fa-times"></i>
-          </button>
         `;
-        
-        const closeBtn = toast.querySelector('button');
-        closeBtn.addEventListener('click', () => {
-          toast.remove();
-        });
-        
-        toastContainer.appendChild(toast);
-        
-        setTimeout(() => {
-          toast.remove();
-        }, 5000);
+        return;
       }
+      
+      researchResults.innerHTML = articles.map(article => `
+        <div class="research-card bg-white dark:bg-gray-700 rounded-lg shadow p-4" data-topics="${article.topics.join(',')}">
+          <div class="flex justify-between items-start mb-2">
+            <h4 class="font-bold text-lg">${article.title}</h4>
+            <span class="text-xs bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
+              ${new Date(article.date).toLocaleDateString()}
+            </span>
+          </div>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">${article.summary}</p>
+          <div class="flex justify-between items-center">
+            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Source: ${article.source}</span>
+            <a href="${article.url}" target="_blank" class="text-primary hover:text-primary-dark text-sm font-medium flex items-center">
+              Read more <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+            </a>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-1">
+            ${article.topics.map(topic => `
+              <span class="text-xs px-2 py-1 rounded-full 
+                ${topic === 'financial' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' : 
+                  topic === 'stress' ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' : 
+                  topic === 'culture' ? 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200' : 
+                  'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'}">
+                ${topic.charAt(0).toUpperCase() + topic.slice(1)}
+              </span>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Filter research articles by topic
+    function filterResearchArticles() {
+      const filterValue = document.getElementById('researchFilter').value;
+      const articles = document.querySelectorAll('.research-card');
+      
+      articles.forEach(article => {
+        const topics = article.getAttribute('data-topics').split(',');
+        
+        if (filterValue === 'all' || topics.includes(filterValue)) {
+          article.classList.remove('hidden');
+        } else {
+          article.classList.add('hidden');
+        }
+      });
+    }
+
+    function showToast(message, type = 'info') {
+      const toastContainer = document.createElement('div');
+      toastContainer.className = 'fixed top-4 right-4 z-50 space-y-2';
+      document.body.appendChild(toastContainer);
+      
+      const toast = document.createElement('div');
+      toast.className = `bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 flex items-start border-l-4 ${
+        type === 'success' ? 'border-green-500' : 
+        type === 'error' ? 'border-red-500' : 
+        type === 'warning' ? 'border-yellow-500' : 'border-blue-500'
+      }`;
+      
+      let icon;
+      if (type === 'success') icon = 'fa-check-circle text-green-500';
+      else if (type === 'error') icon = 'fa-exclamation-circle text-red-500';
+      else if (type === 'warning') icon = 'fa-exclamation-triangle text-yellow-500';
+      else icon = 'fa-info-circle text-blue-500';
+      
+      toast.innerHTML = `
+        <i class="fas ${icon} mr-3 mt-1"></i>
+        <div class="flex-1">
+          <p class="text-sm font-medium">${message}</p>
+        </div>
+        <button class="ml-4 text-gray-400 hover:text-gray-500">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      const closeBtn = toast.querySelector('button');
+      closeBtn.addEventListener('click', () => {
+        toast.remove();
+        if (toastContainer.children.length === 0) {
+          toastContainer.remove();
+        }
+      });
+      
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+        if (toastContainer.children.length === 0) {
+          toastContainer.remove();
+        }
+      }, 5000);
+    }
   </script>
 </body>
 </html>

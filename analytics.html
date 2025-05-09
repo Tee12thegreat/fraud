@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employee Monitoring | Fraud Detection System</title>
+  <title>Behavioral Analytics | Fraud Detection System</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.6.1/dist/socket.io.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -39,115 +38,9 @@
       margin-right: 6px;
     }
 
-    .risk-low {
-      background-color: #10B981;
-    }
-
-    .risk-medium {
-      background-color: #F59E0B;
-    }
-
-    .risk-high {
-      background-color: #EF4444;
-    }
-
-    .alert-animation {
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.5;
-      }
-
-      100% {
-        opacity: 1;
-      }
-    }
-
-    .card-collapse-enter {
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
-    }
-
-    .card-collapse-enter-active {
-      max-height: 1000px;
-      opacity: 1;
-    }
-
-    .dark .table-striped tr:nth-child(even) {
-      background-color: rgba(55, 65, 81, 0.3);
-    }
-
-    .table-striped tr:nth-child(even) {
-      background-color: rgba(243, 244, 246, 0.5);
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
-    }
-
-    @media (max-width: 640px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(10px);
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    body.modal-open {
-      overflow: hidden;
-    }
-
-    body.modal-open::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      z-index: 99;
-    }
-
-    #alertsPanel {
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .employee-details {
-      display: none;
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #f0f0f0;
-      border-radius: 5px;
-    }
-
-    .employee-details.active {
-      display: block;
-    }
+    .risk-low { background-color: #10B981; }
+    .risk-medium { background-color: #F59E0B; }
+    .risk-high { background-color: #EF4444; }
 
     .behavior-tag {
       display: inline-block;
@@ -159,106 +52,17 @@
       margin-bottom: 4px;
     }
 
-    .behavior-financial {
-      background-color: #EFF6FF;
-      color: #1D4ED8;
-    }
+    .behavior-financial { background-color: #EFF6FF; color: #1D4ED8; }
+    .behavior-lifestyle { background-color: #F5F3FF; color: #7C3AED; }
+    .behavior-secrecy { background-color: #FDF2F8; color: #DB2777; }
+    .behavior-vacation { background-color: #ECFDF5; color: #0D9488; }
+    .behavior-reporting { background-color: #FFF7ED; color: #EA580C; }
 
-    .behavior-lifestyle {
-      background-color: #F5F3FF;
-      color: #7C3AED;
-    }
-
-    .behavior-secrecy {
-      background-color: #FDF2F8;
-      color: #DB2777;
-    }
-
-    .behavior-vacation {
-      background-color: #ECFDF5;
-      color: #0D9488;
-    }
-
-    .behavior-reporting {
-      background-color: #FFF7ED;
-      color: #EA580C;
-    }
-
-    .dark .behavior-financial {
-      background-color: #1E3A8A;
-      color: #BFDBFE;
-    }
-
-    .dark .behavior-lifestyle {
-      background-color: #4C1D95;
-      color: #DDD6FE;
-    }
-
-    .dark .behavior-secrecy {
-      background-color: #831843;
-      color: #FBCFE8;
-    }
-
-    .dark .behavior-vacation {
-      background-color: #134E4A;
-      color: #99F6E4;
-    }
-
-    .dark .behavior-reporting {
-      background-color: #7C2D12;
-      color: #FED7AA;
-    }
-
-    .risk-timeline {
-      position: relative;
-      padding-left: 20px;
-    }
-
-    .risk-timeline::before {
-      content: '';
-      position: absolute;
-      left: 6px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background-color: #E5E7EB;
-    }
-
-    .dark .risk-timeline::before {
-      background-color: #374151;
-    }
-
-    .timeline-item {
-      position: relative;
-      padding-bottom: 16px;
-    }
-
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -20px;
-      top: 4px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background-color: #E5E7EB;
-    }
-
-    .dark .timeline-item::before {
-      background-color: #374151;
-    }
-
-    .timeline-item.high::before {
-      background-color: #EF4444;
-    }
-
-    .timeline-item.medium::before {
-      background-color: #F59E0B;
-    }
-
-    .timeline-item.low::before {
-      background-color: #10B981;
-    }
+    .dark .behavior-financial { background-color: #1E3A8A; color: #BFDBFE; }
+    .dark .behavior-lifestyle { background-color: #4C1D95; color: #DDD6FE; }
+    .dark .behavior-secrecy { background-color: #831843; color: #FBCFE8; }
+    .dark .behavior-vacation { background-color: #134E4A; color: #99F6E4; }
+    .dark .behavior-reporting { background-color: #7C2D12; color: #FED7AA; }
 
     .psycho-card {
       transition: all 0.3s ease;
@@ -330,408 +134,1100 @@
       display: block;
     }
 
-    /* Added missing table cell and header styles */
     .table-header {
       @apply px-5 py-3 border-b-2 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider;
     }
 
     .table-cell {
-      @apply px-5 py-3 border-b border-gray-200 dark:border-gray-700 text-sm;
+      @apply px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm;
     }
 
-    /* Added authentication modal */
-    #authModal {
-      z-index: 100;
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .risk-timeline {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .risk-timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: #E5E7EB;
+    }
+
+    .dark .risk-timeline::before {
+      background-color: #374151;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 16px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #E5E7EB;
+    }
+
+    .dark .timeline-item::before {
+      background-color: #374151;
+    }
+
+    .timeline-item.high::before {
+      background-color: #EF4444;
+    }
+
+    .timeline-item.medium::before {
+      background-color: #F59E0B;
+    }
+
+    .timeline-item.low::before {
+      background-color: #10B981;
     }
   </style>
 </head>
+
 <body class="bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-gray-200 transition-colors duration-300">
-  <!-- Sidebar Overlay -->
-  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+  <div class="min-h-screen flex flex-col">
+    <!-- Mobile Sidebar Toggle -->
+    <button id="sidebarToggle" class="fixed top-4 left-4 z-20 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-md md:hidden">
+      <i class="fas fa-bars"></i>
+    </button>
 
-  <!-- Sidebar Navigation -->
-  <div id="sidebar" class="sidebar w-64 bg-white dark:bg-gray-900 shadow-md flex-shrink-0 fixed h-full z-40">
-    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-      <div class="flex items-center">
-        <i class="fas fa-shield-alt text-primary text-2xl mr-3"></i>
-        <h1 class="text-xl font-bold">Fraud Detection</h1>
-      </div>
-    </div>
-    <nav class="p-4">
-      <ul class="space-y-2">
-        <li>
-          <a href="index.html" class="nav-link active flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <i class="fas fa-chart-line mr-3"></i>
-            <span>Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a href="monitoring.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <i class="fas fa-users mr-3"></i>
-            <span>Employee Monitoring</span>
-          </a>
-        </li>
-        <li>
-          <a href="analytics.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <i class="fas fa-chart-pie mr-3"></i>
-            <span>Behavioral Analytics</span>
-          </a>
-        </li>
-        <li>
-          <a href="factors.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <i class="fas fa-brain mr-3"></i>
-            <span>Psychosocial Factors</span>
-          </a>
-        </li>
-        <li>
-          <a href="alerts.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <i class="fas fa-bell mr-3"></i>
-            <span>Alerts & Notifications</span>
-          </a>
-        </li>
-        <li>
-          <a href="settings.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <i class="fas fa-cog mr-3"></i>
-            <span>System Settings</span>
-          </a>
-        </li>
-        <li>
-          <a href="documentation.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <i class="fas fa-book mr-3"></i>
-            <span>Research Documentation</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
-  <main class="flex-grow container mx-auto px-4 py-6">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-      <div>
-        <h2 class="text-2xl font-bold">Employee Monitoring</h2>
-        <p class="text-gray-600 dark:text-gray-400">Track and analyze employee behavior patterns</p>
-      </div>
-      <div class="flex flex-col sm:flex-row gap-3">
-        <div class="relative">
-          <input type="text" placeholder="Search employees..."
-            class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-base w-full">
-          <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar w-64 bg-white dark:bg-gray-900 shadow-md flex-shrink-0 fixed h-full z-40">
+      <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary text-2xl mr-3"></i>
+          <h1 class="text-xl font-bold">Fraud Detection</h1>
         </div>
-        <button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-lg transition">
-          <i class="fas fa-filter"></i>
-          <span>Advanced Filters</span>
-        </button>
       </div>
+      <nav class="p-4">
+        <ul class="space-y-2">
+          <li>
+            <a href="index.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <i class="fas fa-chart-line mr-3"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="analytics.html" class="nav-link active flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <i class="fas fa-chart-pie mr-3"></i>
+              <span>Behavioral Analytics</span>
+            </a>
+          </li>
+          <li>
+            <a href="factors.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <i class="fas fa-brain mr-3"></i>
+              <span>Psychosocial Factors</span>
+            </a>
+          </li>
+          <li>
+            <a href="alerts.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <i class="fas fa-bell mr-3"></i>
+              <span>Alerts & Notifications</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <i class="fas fa-cog mr-3"></i>
+              <span>System Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="documentation.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <i class="fas fa-book mr-3"></i>
+              <span>Research Documentation</span>
+            </a>
+          </li>
+          <li>
+            <a href="hr.html" class="nav-link flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <i class="fas fa-user-tie mr-3"></i>
+              <span>HR Section</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
 
-    <!-- Behavioral Indicators Summary -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-500 mr-4">
-            <i class="fas fa-money-bill-wave"></i>
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col md:pl-64">
+      <!-- Header -->
+      <header class="bg-white dark:bg-gray-900 shadow-md">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+          <div class="flex items-center mb-2 md:mb-0">
+            <h1 class="text-xl md:text-2xl font-bold">Behavioral Analytics</h1>
           </div>
-          <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Financial Discrepancies</p>
-            <p class="text-xl font-bold">12 Cases</p>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-500 mr-4">
-            <i class="fas fa-user-secret"></i>
-          </div>
-          <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Work Secrecy</p>
-            <p class="text-xl font-bold">18 Cases</p>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-500 mr-4">
-            <i class="fas fa-umbrella-beach"></i>
-          </div>
-          <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Vacation Avoidance</p>
-            <p class="text-xl font-bold">9 Cases</p>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/30 text-red-500 mr-4">
-            <i class="fas fa-chart-line"></i>
-          </div>
-          <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Lifestyle Changes</p>
-            <p class="text-xl font-bold">15 Cases</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Employee Monitoring Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden mb-6">
-      <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-        <h3 class="text-lg font-semibold">Employee Risk Monitoring</h3>
-        <div class="flex items-center space-x-2">
-          <button class="text-sm text-primary hover:underline">
-            <i class="fas fa-download mr-1"></i> Export
-          </button>
-        </div>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="min-w-full leading-normal table-striped">
-          <thead>
-            <tr>
-              <th class="table-header">Employee</th>
-              <th class="table-header">Department</th>
-              <th class="table-header">Risk Level</th>
-              <th class="table-header">Behavioral Indicators</th>
-              <th class="table-header">Last Activity</th>
-              <th class="table-header">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="table-cell">John Linglong</td>
-              <td class="table-cell">Finance</td>
-              <td class="table-cell"><span class="risk-indicator risk-high"></span> High</td>
-              <td class="table-cell">
-                <div class="flex flex-wrap gap-1">
-                  <span class="behavior-tag behavior-financial">Financial</span>
-                  <span class="behavior-tag behavior-secrecy">Secrecy</span>
+          <div class="flex items-center space-x-2">
+            <div class="relative">
+              <button id="alertsDropdown"
+                class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative">
+                <i class="fas fa-bell text-lg"></i>
+                <span id="alertCount"
+                  class="absolute top-0 right-0 bg-risk-high text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+              </button>
+            </div>
+            <button id="theme-toggle"
+              class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <i class="fas fa-moon dark:hidden"></i>
+              <i class="fas fa-sun hidden dark:inline"></i>
+            </button>
+            <div class="relative">
+              <button id="userDropdown"
+                class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <img id="userAvatar" class="w-8 h-8 rounded-full" src="https://i.pravatar.cc/150?img=3" alt="User avatar">
+                <span id="userName" class="hidden md:inline font-medium">Admin User</span>
+                <i class="fas fa-chevron-down text-xs"></i>
+              </button>
+              <div id="userPanel"
+                class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-30">
+                <div class="p-3 border-b border-gray-200 dark:border-gray-600">
+                  <p id="userRole" class="text-sm text-gray-600 dark:text-gray-400">Role: <span
+                      class="font-medium">Administrator</span></p>
                 </div>
-              </td>
-              <td class="table-cell">2 hours ago</td>
-              <td class="table-cell">
-                <button class="text-primary hover:underline">Details</button>
-              </td>
-            </tr>
-            <!-- More rows with employee data -->
-          </tbody>
-        </table>
-      </div>
-    </div>
+                <div class="p-2">
+                  <button id="logoutBtn"
+                    class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
-    <!-- Behavioral Pattern Trends -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-4">Behavioral Pattern Trends</h3>
-        <div class="h-64">
-          <canvas id="trendChart"></canvas>
-        </div>
+      <!-- Floating Toast Notification Container -->
+      <div id="toastContainer" class="fixed top-5 right-5 z-50 w-72 space-y-3">
+        <!-- Toasts will be dynamically added here -->
       </div>
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-4">Department Risk Distribution</h3>
-        <div class="h-64">
-          <canvas id="departmentChart"></canvas>
-        </div>
-      </div>
-    </div>
-  </main>
 
-  <!-- Added authentication modal -->
-  <div id="authModal" class="modal">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
-      <h2 class="text-xl font-bold mb-4">Authentication Required</h2>
-      <p class="mb-4">Please enter your credentials to access the Employee Monitoring System</p>
-      <form>
-        <div class="mb-4">
-          <label class="block text-gray-700 dark:text-gray-300 mb-2" for="username">Username</label>
-          <input type="text" id="username" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded dark:bg-gray-700">
+      <!-- Main Content -->
+      <main class="flex-grow container mx-auto px-4 py-6">
+        <!-- Analytics Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <div>
+            <h2 class="text-2xl font-bold">Behavioral Analytics Dashboard</h2>
+            <p class="text-gray-600 dark:text-gray-400">
+              Comprehensive analysis of employee behavioral patterns
+              <span id="dataSource" class="text-xs bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 px-2 py-1 rounded ml-2">
+                <!-- Will be populated by JavaScript -->
+              </span>
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <div class="relative">
+              <input type="text" id="analyticsSearch" placeholder="Search analytics..."
+                class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-base w-full">
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <button id="exportAnalyticsBtn"
+              class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-lg transition">
+              <i class="fas fa-download"></i>
+              <span>Export Data</span>
+            </button>
+          </div>
         </div>
-        <div class="mb-6">
-          <label class="block text-gray-700 dark:text-gray-300 mb-2" for="password">Password</label>
-          <input type="password" id="password" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded dark:bg-gray-700">
+
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-500 mr-4">
+              <i class="fas fa-chart-line text-xl"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Total Patterns Analyzed</p>
+              <p class="text-xl font-bold" id="totalPatterns">0</p>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex items-center">
+            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-500 mr-4">
+              <i class="fas fa-exclamation-triangle text-xl"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">High Risk Patterns</p>
+              <p class="text-xl font-bold" id="highRiskPatterns">0</p>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-500 mr-4">
+              <i class="fas fa-clock text-xl"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Recent Analysis</p>
+              <p class="text-xl font-bold" id="recentAnalysis">0 min ago</p>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex items-center">
+            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30 text-green-500 mr-4">
+              <i class="fas fa-database text-xl"></i>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Data Sources</p>
+              <p class="text-xl font-bold" id="dataSources">0</p>
+            </div>
+          </div>
         </div>
-        <div class="flex justify-end">
-          <button type="button" id="loginBtn" class="bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-lg transition">
-            Login
-          </button>
+
+        <!-- Behavioral Patterns Analysis -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <!-- Pattern Distribution Chart -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 lg:col-span-2">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold">Behavioral Pattern Distribution</h3>
+              <div class="flex items-center space-x-2">
+                <select id="timePeriodSelect" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 text-sm">
+                  <option value="7">Last 7 days</option>
+                  <option value="30">Last 30 days</option>
+                  <option value="90">Last 90 days</option>
+                  <option value="all">All time</option>
+                </select>
+              </div>
+            </div>
+            <div class="h-80">
+              <canvas id="patternDistributionChart"></canvas>
+            </div>
+          </div>
+          
+          <!-- Pattern Frequency -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold mb-4">Pattern Frequency</h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">Financial Discrepancies</span>
+                  <span class="text-sm" id="financialCount">0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                  <div class="bg-blue-500 h-2 rounded-full" id="financialBar" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">Work Secrecy</span>
+                  <span class="text-sm" id="secrecyCount">0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                  <div class="bg-purple-500 h-2 rounded-full" id="secrecyBar" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">Vacation Avoidance</span>
+                  <span class="text-sm" id="vacationCount">0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                  <div class="bg-teal-500 h-2 rounded-full" id="vacationBar" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">Lifestyle Changes</span>
+                  <span class="text-sm" id="lifestyleCount">0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                  <div class="bg-pink-500 h-2 rounded-full" id="lifestyleBar" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">Reporting Issues</span>
+                  <span class="text-sm" id="reportingCount">0</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                  <div class="bg-orange-500 h-2 rounded-full" id="reportingBar" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </form>
+
+        <!-- Department Analysis -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <!-- Department Risk Distribution -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold mb-4">Department Risk Distribution</h3>
+            <div class="h-64">
+              <canvas id="departmentChart"></canvas>
+            </div>
+          </div>
+          
+          <!-- Risk Over Time -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold mb-4">Risk Trends Over Time</h3>
+            <div class="h-64">
+              <canvas id="trendChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Pattern Analysis -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden mb-6">
+          <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+            <h3 class="text-lg font-semibold">Detailed Pattern Analysis</h3>
+            <div class="flex items-center space-x-2">
+              <button class="text-sm text-primary hover:underline">
+                <i class="fas fa-filter mr-1"></i> Filter
+              </button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full leading-normal table-striped">
+              <thead>
+                <tr>
+                  <th class="table-header">Pattern Type</th>
+                  <th class="table-header">Frequency</th>
+                  <th class="table-header">Risk Level</th>
+                  <th class="table-header">Most Common Department</th>
+                  <th class="table-header">Trend</th>
+                  <th class="table-header">Details</th>
+                </tr>
+              </thead>
+              <tbody id="patternTableBody">
+                <!-- Pattern data will be populated here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-4">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p>Fraudulent Employee Behavior Detection System v2.0</p>
+          <p class="mt-1">Behavioral Analytics Dashboard</p>
+        </div>
+      </footer>
     </div>
   </div>
-
   <script>
      document.addEventListener('DOMContentLoaded', () => {
-        // Authentication
-        const authModal = document.getElementById('authModal');
-        const body = document.body;
-  
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-          e.preventDefault();
-          const username = document.getElementById('username').value;
-          const role = document.getElementById('role').value;
-          
-          document.getElementById('userName').textContent = username;
-          document.getElementById('userRole').innerHTML = `Role: <span class="font-medium">${role.charAt(0).toUpperCase() + role.slice(1)}</span>`;
-          
-          authModal.classList.remove('active');
-          body.classList.remove('modal-open');
-          
-          // Show welcome toast
-          showToast(`Welcome, ${username}!`, 'success');
-        });
-  
-        // Theme toggle
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-          document.documentElement.classList.toggle('dark');
-          localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-        });
-  
-        // Initialize theme from localStorage
-        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
+
+      let analyticsData = {
+      loginLogout: null,
+      lifestyle: null,
+      payData: null
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Previous initialization code remains the same
+      // ... (theme toggle, dropdowns, etc.)
+
+      // Listen for messages from other tabs (like HR page)
+      window.addEventListener('storage', function(event) {
+        if (event.key === 'hrUploadData') {
+          const uploadData = JSON.parse(event.newValue);
+          processHRUpload(uploadData);
         }
-  
-        // Dropdowns
-        document.querySelectorAll('.dropdown-btn').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const panelId = this.id.replace('Dropdown', 'Panel');
-            const panel = document.getElementById(panelId);
-            panel.classList.toggle('hidden');
-          });
-        });
-  
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', (e) => {
-          if (!e.target.closest('.relative')) {
-            document.querySelectorAll('.dropdown-panel').forEach(panel => {
-              panel.classList.add('hidden');
-            });
-          }
-        });
-  
-        // Employee details toggle
-        document.querySelectorAll('.view-details-btn').forEach(button => {
-          button.addEventListener('click', function() {
-            const employee = this.dataset.employee;
-            const detailsRow = document.getElementById(`${employee}-details`);
-            detailsRow.classList.toggle('active');
-          });
-        });
-  
-        // Department tabs
-        document.querySelectorAll('.tab-btn').forEach(tab => {
-          tab.addEventListener('click', function() {
-            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            // Here you would filter the table by department
-          });
-        });
-  
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-          authModal.classList.add('active');
-          body.classList.add('modal-open');
-          showToast('You have been logged out', 'info');
-        });
-  
-        // Mark all alerts as read
-        document.getElementById('markAllRead').addEventListener('click', () => {
-          document.getElementById('alertCount').textContent = '0';
-          showToast('All alerts marked as read', 'success');
-        });
-  
-        // Sidebar toggle for mobile
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        
-        sidebarToggle.addEventListener('click', () => {
-          sidebar.classList.toggle('active');
-          sidebarOverlay.classList.toggle('active');
-        });
-        
-        sidebarOverlay.addEventListener('click', () => {
-          sidebar.classList.remove('active');
-          sidebarOverlay.classList.remove('active');
-        });
-  
-        // Initialize charts
-        initCharts();
-  
-        // Show authentication modal on page load
-        authModal.classList.add('active');
-        body.classList.add('modal-open');
       });
-  
-      function initCharts() {
-        // Behavioral Patterns Chart
-        const behaviorCtx = document.getElementById('behaviorChart').getContext('2d');
-        new Chart(behaviorCtx, {
-          type: 'doughnut',
-          data: {
-            labels: ['Financial Discrepancies', 'Lifestyle Changes', 'Work Secrecy', 'Vacation Avoidance', 'Reporting Issues'],
-            datasets: [{
-              data: [32.6, 74.4, 76.7, 58.1, 41.9],
-              backgroundColor: [
-                '#3B82F6',
-                '#8B5CF6',
-                '#EC4899',
-                '#14B8A6',
-                '#F97316'
-              ],
-              borderWidth: 0
-            }]
+
+      // Initialize charts
+      initCharts();
+
+      // Load initial analytics data
+      loadAnalyticsData();
+    });
+
+    function processHRUpload(uploadData) {
+      // Store the uploaded data based on type
+      analyticsData[uploadData.type] = uploadData;
+      
+      // Update the UI based on the data type
+      switch(uploadData.type) {
+        case 'loginLogout':
+          updateLoginLogoutAnalytics(uploadData);
+          break;
+        case 'lifestyle':
+          updateLifestyleAnalytics(uploadData);
+          break;
+        case 'payData':
+          updatePayDataAnalytics(uploadData);
+          break;
+      }
+      
+      showToast(`New ${uploadData.typeName} data processed`, 'success');
+    }
+
+    function updateLoginLogoutAnalytics(data) {
+      // Update the data source indicator
+      document.getElementById('dataSource').textContent = `Data: ${data.typeName} (${data.files.length} files)`;
+      
+      // Generate pattern data based on login/logout patterns
+      const patterns = analyzeLoginPatterns(data.content);
+      
+      // Update the dashboard with this data
+      updateDashboardWithPatterns(patterns, 'login/logout');
+    }
+
+    function updateLifestyleAnalytics(data) {
+      document.getElementById('dataSource').textContent = `Data: ${data.typeName} (${data.files.length} files)`;
+      const patterns = analyzeLifestylePatterns(data.content);
+      updateDashboardWithPatterns(patterns, 'lifestyle');
+    }
+
+    function updatePayDataAnalytics(data) {
+      document.getElementById('dataSource').textContent = `Data: ${data.typeName} (${data.files.length} files)`;
+      const patterns = analyzePayPatterns(data.content);
+      updateDashboardWithPatterns(patterns, 'payroll');
+    }
+
+    function analyzeLoginPatterns(content) {
+      // Simulate analysis of login patterns
+      // In a real app, this would use actual analysis algorithms
+      const patternCount = Math.floor(Math.random() * 50) + 20;
+      const highRiskCount = Math.floor(patternCount * 0.3);
+      
+      return {
+        totalPatterns: patternCount,
+        highRiskPatterns: highRiskCount,
+        recentAnalysis: "0",
+        dataSources: 1,
+        patternDistribution: {
+          financial: Math.floor(Math.random() * 20),
+          secrecy: Math.floor(Math.random() * 15) + 10,
+          vacation: Math.floor(Math.random() * 10) + 5,
+          lifestyle: Math.floor(Math.random() * 15),
+          reporting: Math.floor(Math.random() * 5)
+        },
+        departmentDistribution: {
+          finance: Math.floor(Math.random() * 30) + 10,
+          hr: Math.floor(Math.random() * 20) + 5,
+          procurement: Math.floor(Math.random() * 25) + 10,
+          it: Math.floor(Math.random() * 15) + 5,
+          operations: Math.floor(Math.random() * 10)
+        },
+        trendData: {
+          highRisk: Array(6).fill(0).map(() => Math.floor(Math.random() * 10) + 5),
+          mediumRisk: Array(6).fill(0).map(() => Math.floor(Math.random() * 15) + 10),
+          lowRisk: Array(6).fill(0).map(() => Math.floor(Math.random() * 20) + 15)
+        },
+        patterns: [
+          {
+            type: "Unusual Login Times",
+            frequency: Math.floor(Math.random() * 20) + 10,
+            riskLevel: "high",
+            department: "IT",
+            trend: "up"
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'right',
-                labels: {
-                  usePointStyle: true,
-                  padding: 20
-                }
-              }
-            },
-            cutout: '70%'
+          {
+            type: "After-hours Access",
+            frequency: Math.floor(Math.random() * 15) + 5,
+            riskLevel: "medium",
+            department: "Finance",
+            trend: "stable"
+          },
+          {
+            type: "Multiple Login Failures",
+            frequency: Math.floor(Math.random() * 8) + 3,
+            riskLevel: "high",
+            department: "HR",
+            trend: "up"
+          },
+          {
+            type: "Remote Access Patterns",
+            frequency: Math.floor(Math.random() * 12) + 5,
+            riskLevel: "medium",
+            department: "Operations",
+            trend: "down"
           }
-        });
-      }
-  
-      function showToast(message, type = 'info') {
-        const toastContainer = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 flex items-start border-l-4 ${
-          type === 'success' ? 'border-green-500' : 
-          type === 'error' ? 'border-red-500' : 
-          type === 'warning' ? 'border-yellow-500' : 'border-blue-500'
-        }`;
-        
-        let icon;
-        if (type === 'success') icon = 'fa-check-circle text-green-500';
-        else if (type === 'error') icon = 'fa-exclamation-circle text-red-500';
-        else if (type === 'warning') icon = 'fa-exclamation-triangle text-yellow-500';
-        else icon = 'fa-info-circle text-blue-500';
-        
-        toast.innerHTML = `
-          <i class="fas ${icon} mr-3 mt-1"></i>
-          <div class="flex-1">
-            <p class="text-sm font-medium">${message}</p>
-          </div>
-          <button class="ml-4 text-gray-400 hover:text-gray-500">
-            <i class="fas fa-times"></i>
-          </button>
+        ]
+      };
+    }
+
+    function analyzeLifestylePatterns(content) {
+      const patternCount = Math.floor(Math.random() * 40) + 30;
+      const highRiskCount = Math.floor(patternCount * 0.4);
+      
+      return {
+        totalPatterns: patternCount,
+        highRiskPatterns: highRiskCount,
+        recentAnalysis: "0",
+        dataSources: 1,
+        patternDistribution: {
+          financial: Math.floor(Math.random() * 25) + 15,
+          secrecy: Math.floor(Math.random() * 10) + 5,
+          vacation: Math.floor(Math.random() * 5) + 2,
+          lifestyle: Math.floor(Math.random() * 30) + 20,
+          reporting: Math.floor(Math.random() * 8) + 3
+        },
+        departmentDistribution: {
+          finance: Math.floor(Math.random() * 40) + 20,
+          hr: Math.floor(Math.random() * 15) + 5,
+          procurement: Math.floor(Math.random() * 35) + 15,
+          it: Math.floor(Math.random() * 10) + 5,
+          operations: Math.floor(Math.random() * 15) + 5
+        },
+        trendData: {
+          highRisk: Array(6).fill(0).map(() => Math.floor(Math.random() * 15) + 8),
+          mediumRisk: Array(6).fill(0).map(() => Math.floor(Math.random() * 20) + 15),
+          lowRisk: Array(6).fill(0).map(() => Math.floor(Math.random() * 15) + 10)
+        },
+        patterns: [
+          {
+            type: "Luxury Purchases",
+            frequency: Math.floor(Math.random() * 25) + 15,
+            riskLevel: "high",
+            department: "Finance",
+            trend: "up"
+          },
+          {
+            type: "Gambling Activities",
+            frequency: Math.floor(Math.random() * 15) + 5,
+            riskLevel: "high",
+            department: "Procurement",
+            trend: "up"
+          },
+          {
+            type: "Debt Indicators",
+            frequency: Math.floor(Math.random() * 20) + 10,
+            riskLevel: "medium",
+            department: "Finance",
+            trend: "stable"
+          },
+          {
+            type: "Unreported Income",
+            frequency: Math.floor(Math.random() * 10) + 5,
+            riskLevel: "high",
+            department: "HR",
+            trend: "down"
+          }
+        ]
+      };
+    }
+
+    function analyzePayPatterns(content) {
+      const patternCount = Math.floor(Math.random() * 60) + 40;
+      const highRiskCount = Math.floor(patternCount * 0.35);
+      
+      return {
+        totalPatterns: patternCount,
+        highRiskPatterns: highRiskCount,
+        recentAnalysis: "0",
+        dataSources: 1,
+        patternDistribution: {
+          financial: Math.floor(Math.random() * 35) + 25,
+          secrecy: Math.floor(Math.random() * 15) + 10,
+          vacation: Math.floor(Math.random() * 8) + 4,
+          lifestyle: Math.floor(Math.random() * 12) + 8,
+          reporting: Math.floor(Math.random() * 20) + 15
+        },
+        departmentDistribution: {
+          finance: Math.floor(Math.random() * 50) + 30,
+          hr: Math.floor(Math.random() * 20) + 10,
+          procurement: Math.floor(Math.random() * 40) + 20,
+          it: Math.floor(Math.random() * 15) + 5,
+          operations: Math.floor(Math.random() * 25) + 10
+        },
+        trendData: {
+          highRisk: Array(6).fill(0).map(() => Math.floor(Math.random() * 20) + 10),
+          mediumRisk: Array(6).fill(0).map(() => Math.floor(Math.random() * 25) + 15),
+          lowRisk: Array(6).fill(0).map(() => Math.floor(Math.random() * 20) + 10)
+        },
+        patterns: [
+          {
+            type: "Bonus Anomalies",
+            frequency: Math.floor(Math.random() * 30) + 20,
+            riskLevel: "high",
+            department: "Finance",
+            trend: "up"
+          },
+          {
+            type: "Overtime Irregularities",
+            frequency: Math.floor(Math.random() * 25) + 15,
+            riskLevel: "medium",
+            department: "HR",
+            trend: "stable"
+          },
+          {
+            type: "Expense Report Issues",
+            frequency: Math.floor(Math.random() * 35) + 20,
+            riskLevel: "high",
+            department: "Procurement",
+            trend: "up"
+          },
+          {
+            type: "Tax Withholding Changes",
+            frequency: Math.floor(Math.random() * 15) + 5,
+            riskLevel: "medium",
+            department: "Finance",
+            trend: "down"
+          }
+        ]
+      };
+    }
+
+    function updateDashboardWithPatterns(data, dataType) {
+      // Update key metrics
+      document.getElementById('totalPatterns').textContent = data.totalPatterns;
+      document.getElementById('highRiskPatterns').textContent = data.highRiskPatterns;
+      document.getElementById('recentAnalysis').textContent = `${data.recentAnalysis} min ago`;
+      document.getElementById('dataSources').textContent = data.dataSources;
+      
+      // Update pattern distribution chart
+      window.patternChart.data.datasets[0].data = [
+        data.patternDistribution.financial,
+        data.patternDistribution.secrecy,
+        data.patternDistribution.vacation,
+        data.patternDistribution.lifestyle,
+        data.patternDistribution.reporting
+      ];
+      window.patternChart.update();
+      
+      // Update department chart
+      window.deptChart.data.datasets[0].data = [
+        data.departmentDistribution.finance,
+        data.departmentDistribution.hr,
+        data.departmentDistribution.procurement,
+        data.departmentDistribution.it,
+        data.departmentDistribution.operations
+      ];
+      window.deptChart.update();
+      
+      // Update trend chart
+      window.trendChart.data.datasets[0].data = data.trendData.highRisk;
+      window.trendChart.data.datasets[1].data = data.trendData.mediumRisk;
+      window.trendChart.data.datasets[2].data = data.trendData.lowRisk;
+      window.trendChart.update();
+      
+      // Update pattern frequency bars
+      document.getElementById('financialCount').textContent = data.patternDistribution.financial;
+      document.getElementById('financialBar').style.width = `${(data.patternDistribution.financial / data.totalPatterns) * 100}%`;
+      
+      document.getElementById('secrecyCount').textContent = data.patternDistribution.secrecy;
+      document.getElementById('secrecyBar').style.width = `${(data.patternDistribution.secrecy / data.totalPatterns) * 100}%`;
+      
+      document.getElementById('vacationCount').textContent = data.patternDistribution.vacation;
+      document.getElementById('vacationBar').style.width = `${(data.patternDistribution.vacation / data.totalPatterns) * 100}%`;
+      
+      document.getElementById('lifestyleCount').textContent = data.patternDistribution.lifestyle;
+      document.getElementById('lifestyleBar').style.width = `${(data.patternDistribution.lifestyle / data.totalPatterns) * 100}%`;
+      
+      document.getElementById('reportingCount').textContent = data.patternDistribution.reporting;
+      document.getElementById('reportingBar').style.width = `${(data.patternDistribution.reporting / data.totalPatterns) * 100}%`;
+      
+      // Update pattern table
+      const tableBody = document.getElementById('patternTableBody');
+      tableBody.innerHTML = '';
+      
+      data.patterns.forEach(pattern => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 dark:hover:bg-gray-750';
+        row.innerHTML = `
+          <td class="table-cell">
+            <span class="font-medium">${pattern.type}</span>
+          </td>
+          <td class="table-cell">${pattern.frequency}</td>
+          <td class="table-cell">
+            <span class="risk-indicator risk-${pattern.riskLevel}"></span>
+            ${pattern.riskLevel.charAt(0).toUpperCase() + pattern.riskLevel.slice(1)}
+          </td>
+          <td class="table-cell">${pattern.department}</td>
+          <td class="table-cell">
+            <span class="inline-flex items-center">
+              ${pattern.trend === 'up' ? 
+                '<i class="fas fa-arrow-up text-red-500 mr-1"></i> Increasing' : 
+                pattern.trend === 'down' ? 
+                '<i class="fas fa-arrow-down text-green-500 mr-1"></i> Decreasing' : 
+                '<i class="fas fa-minus text-gray-500 mr-1"></i> Stable'}
+            </span>
+          </td>
+          <td class="table-cell">
+            <button class="text-primary hover:underline">View</button>
+          </td>
         `;
-        
-        const closeBtn = toast.querySelector('button');
-        closeBtn.addEventListener('click', () => {
-          toast.remove();
-        });
-        
-        toastContainer.appendChild(toast);
-        
-        setTimeout(() => {
-          toast.remove();
-        }, 5000);
+        tableBody.appendChild(row);
+      });
+    }
+      // Theme toggle
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      });
+
+      // Initialize theme from localStorage
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
       }
+
+      // Dropdowns
+      document.getElementById('userDropdown').addEventListener('click', function() {
+        document.getElementById('userPanel').classList.toggle('hidden');
+      });
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.relative')) {
+          document.getElementById('userPanel').classList.add('hidden');
+        }
+      });
+
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        showToast('You have been logged out', 'info');
+      });
+
+      // Export button
+      document.getElementById('exportAnalyticsBtn').addEventListener('click', () => {
+        showToast('Exporting analytics data...', 'info');
+        setTimeout(() => showToast('Data exported successfully', 'success'), 1500);
+      });
+
+      // Time period select
+      document.getElementById('timePeriodSelect').addEventListener('change', function() {
+        updateAnalyticsData(this.value);
+      });
+
+      // Sidebar toggle for mobile
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
+      });
+      
+      sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+      });
+
+      // Initialize charts
+      initCharts();
+
+      // Load analytics data
+      loadAnalyticsData();
+    });
+
+    function initCharts() {
+      // Pattern Distribution Chart
+      const patternCtx = document.getElementById('patternDistributionChart').getContext('2d');
+      window.patternChart = new Chart(patternCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Financial', 'Secrecy', 'Vacation', 'Lifestyle', 'Reporting'],
+          datasets: [{
+            label: 'Pattern Count',
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: [
+              '#3B82F6',
+              '#8B5CF6',
+              '#14B8A6',
+              '#EC4899',
+              '#F97316'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                precision: 0
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+
+      // Department Chart
+      const deptCtx = document.getElementById('departmentChart').getContext('2d');
+      window.deptChart = new Chart(deptCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Finance', 'HR', 'Procurement', 'IT', 'Operations'],
+          datasets: [{
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: [
+              '#3B82F6',
+              '#8B5CF6',
+              '#EC4899',
+              '#14B8A6',
+              '#F97316'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right'
+            }
+          },
+          cutout: '70%'
+        }
+      });
+
+      // Trend Chart
+      const trendCtx = document.getElementById('trendChart').getContext('2d');
+      window.trendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [
+            {
+              label: 'High Risk',
+              data: [0, 0, 0, 0, 0, 0],
+              borderColor: '#EF4444',
+              backgroundColor: 'rgba(239, 68, 68, 0.1)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: 'Medium Risk',
+              data: [0, 0, 0, 0, 0, 0],
+              borderColor: '#F59E0B',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: 'Low Risk',
+              data: [0, 0, 0, 0, 0, 0],
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              tension: 0.3,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    function loadAnalyticsData() {
+      // In a real app, this would fetch from an API
+      // For demo, we'll use sample data
+      const sampleData = {
+        dataType: "comprehensive",
+        timestamp: new Date().toISOString(),
+        totalPatterns: 247,
+        highRiskPatterns: 42,
+        recentAnalysis: "15",
+        dataSources: 5,
+        patternDistribution: {
+          financial: 78,
+          secrecy: 65,
+          vacation: 42,
+          lifestyle: 38,
+          reporting: 24
+        },
+        departmentDistribution: {
+          finance: 85,
+          hr: 42,
+          procurement: 63,
+          it: 35,
+          operations: 22
+        },
+        trendData: {
+          highRisk: [12, 19, 15, 27, 23, 42],
+          mediumRisk: [24, 29, 36, 42, 38, 35],
+          lowRisk: [45, 52, 48, 39, 42, 38]
+        },
+        patterns: [
+          {
+            type: "Financial Discrepancies",
+            frequency: 78,
+            riskLevel: "high",
+            department: "Finance",
+            trend: "up"
+          },
+          {
+            type: "Work Secrecy",
+            frequency: 65,
+            riskLevel: "high",
+            department: "Procurement",
+            trend: "up"
+          },
+          {
+            type: "Vacation Avoidance",
+            frequency: 42,
+            riskLevel: "medium",
+            department: "HR",
+            trend: "stable"
+          },
+          {
+            type: "Lifestyle Changes",
+            frequency: 38,
+            riskLevel: "medium",
+            department: "Finance",
+            trend: "up"
+          },
+          {
+            type: "Reporting Issues",
+            frequency: 24,
+            riskLevel: "low",
+            department: "Operations",
+            trend: "down"
+          }
+        ]
+      };
+
+      updateAnalyticsData('all', sampleData);
+    }
+
+    function updateAnalyticsData(timePeriod, data) {
+      // Update key metrics
+      document.getElementById('totalPatterns').textContent = data.totalPatterns;
+      document.getElementById('highRiskPatterns').textContent = data.highRiskPatterns;
+      document.getElementById('recentAnalysis').textContent = `${data.recentAnalysis} min ago`;
+      document.getElementById('dataSources').textContent = data.dataSources;
+      
+      // Update data source indicator
+      document.getElementById('dataSource').textContent = `Data: ${data.dataType}`;
+      
+      // Update pattern distribution chart
+      window.patternChart.data.datasets[0].data = [
+        data.patternDistribution.financial,
+        data.patternDistribution.secrecy,
+        data.patternDistribution.vacation,
+        data.patternDistribution.lifestyle,
+        data.patternDistribution.reporting
+      ];
+      window.patternChart.update();
+      
+      // Update department chart
+      window.deptChart.data.datasets[0].data = [
+        data.departmentDistribution.finance,
+        data.departmentDistribution.hr,
+        data.departmentDistribution.procurement,
+        data.departmentDistribution.it,
+        data.departmentDistribution.operations
+      ];
+      window.deptChart.update();
+      
+      // Update trend chart
+      window.trendChart.data.datasets[0].data = data.trendData.highRisk;
+      window.trendChart.data.datasets[1].data = data.trendData.mediumRisk;
+      window.trendChart.data.datasets[2].data = data.trendData.lowRisk;
+      window.trendChart.update();
+      
+      // Update pattern frequency bars
+      document.getElementById('financialCount').textContent = data.patternDistribution.financial;
+      document.getElementById('financialBar').style.width = `${(data.patternDistribution.financial / data.totalPatterns) * 100}%`;
+      
+      document.getElementById('secrecyCount').textContent = data.patternDistribution.secrecy;
+      document.getElementById('secrecyBar').style.width = `${(data.patternDistribution.secrecy / data.totalPatterns) * 100}%`;
+      
+      document.getElementById('vacationCount').textContent = data.patternDistribution.vacation;
+      document.getElementById('vacationBar').style.width = `${(data.patternDistribution.vacation / data.totalPatterns) * 100}%`;
+      
+      document.getElementById('lifestyleCount').textContent = data.patternDistribution.lifestyle;
+      document.getElementById('lifestyleBar').style.width = `${(data.patternDistribution.lifestyle / data.totalPatterns) * 100}%`;
+      
+      document.getElementById('reportingCount').textContent = data.patternDistribution.reporting;
+      document.getElementById('reportingBar').style.width = `${(data.patternDistribution.reporting / data.totalPatterns) * 100}%`;
+      
+      // Update pattern table
+      const tableBody = document.getElementById('patternTableBody');
+      tableBody.innerHTML = '';
+      
+      data.patterns.forEach(pattern => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 dark:hover:bg-gray-750';
+        row.innerHTML = `
+          <td class="table-cell">
+            <span class="font-medium">${pattern.type}</span>
+          </td>
+          <td class="table-cell">${pattern.frequency}</td>
+          <td class="table-cell">
+            <span class="risk-indicator risk-${pattern.riskLevel}"></span>
+            ${pattern.riskLevel.charAt(0).toUpperCase() + pattern.riskLevel.slice(1)}
+          </td>
+          <td class="table-cell">${pattern.department}</td>
+          <td class="table-cell">
+            <span class="inline-flex items-center">
+              ${pattern.trend === 'up' ? 
+                '<i class="fas fa-arrow-up text-red-500 mr-1"></i> Increasing' : 
+                pattern.trend === 'down' ? 
+                '<i class="fas fa-arrow-down text-green-500 mr-1"></i> Decreasing' : 
+                '<i class="fas fa-minus text-gray-500 mr-1"></i> Stable'}
+            </span>
+          </td>
+          <td class="table-cell">
+            <button class="text-primary hover:underline">View</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+     // Alert count simulation
+     setInterval(() => {
+      const alertCount = Math.floor(Math.random() * 10);
+      const alertElement = document.getElementById('alertCount');
+      
+      if (alertCount > 0) {
+        alertElement.textContent = alertCount;
+        alertElement.classList.remove('hidden');
+      } else {
+        alertElement.classList.add('hidden');
+      }
+    }, 10000);
+
+    // Simulate real-time data updates
+    setInterval(() => {
+      // In a real app, this would fetch new data from an API
+      const now = new Date();
+      const minutes = now.getMinutes();
+      
+      // Update recent analysis time
+      document.getElementById('recentAnalysis').textContent = `${minutes} min ago`;
+      
+      // Occasionally show a toast notification
+      if (minutes % 5 === 0) {
+        const messages = [
+          "New behavioral patterns detected",
+          "Risk level updated for Finance department",
+          "3 new high-risk employees identified",
+          "System analysis completed"
+        ];
+        const types = ['info', 'warning', 'error', 'success'];
+        const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+        const randomType = types[Math.floor(Math.random() * types.length)];
+        
+        showToast(randomMsg, randomType);
+      }
+    }, 60000);
   </script>
 </body>
 </html>

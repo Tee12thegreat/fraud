@@ -377,6 +377,17 @@
         }
       }, 100);
     }
+     // After upload completes, store data for analytics page
+  const uploadData = {
+    type: dataType,
+    typeName: dataTypeName,
+    files: Array.from(files).map(f => f.name),
+    content: "Simulated file content - in a real app this would be the parsed data",
+    timestamp: new Date().toISOString()
+  };
+
+  // Store data that the analytics page can listen for
+  localStorage.setItem('hrUploadData', JSON.stringify(uploadData));
 
     function showToast(message, type = 'info') {
       const toastContainer = document.getElementById('toastContainer');
