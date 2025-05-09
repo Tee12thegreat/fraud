@@ -1,5 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A49B5',
+                        'gray-dark': '#181818',
+                        'gray-light': '#F9FAFB'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-dark text-gray-800 dark:text-gray-200 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <!-- Login Card -->
+        <div class="bg-gray-light dark:bg-gray-900 rounded-xl shadow-lg p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold mb-2">Welcome Back</h1>
+                <p class="text-gray-600 dark:text-gray-400">Sign in to your account</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-6">
+                <!-- Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                    <input type="email" id="email" 
+                        class="w-full px-4 py-3 rounded-lg text-base border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-800"
+                        placeholder="Enter your email" required>
+                    <p id="emailError" class="text-red-500 text-sm mt-1 hidden"></p>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <label for="password" class="block text-sm font-medium">Password</label>
+                        <a href="#" class="text-sm text-primary hover:underline">Forgot password?</a>
+                    </div>
+                    <div class="relative">
+                        <input type="password" id="password" 
+                            class="w-full px-4 py-3 rounded-lg text-base border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-800"
+                            placeholder="Enter your password" required>
+                        <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" id="eyeIcon">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor" id="eyeOffIcon">
+                                <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd" />
+                                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="passwordError" class="text-red-500 text-sm mt-1 hidden"></p>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="flex items-center">
+                    <input type="checkbox" id="remember" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                    <label for="remember" class="ml-2 block text-sm">Remember me</label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-medium py-3 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                    Sign In
+                </button>
+
+                <!-- Register Link -->
+                <div class="text-center mt-4">
+                    <p>Don't have an account? <a href="#" class="text-primary hover:underline">Register</a></p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Theme Toggle -->
+        <div class="mt-6 text-center">
+            <button id="themeToggle" class="inline-flex items-center px-3 py-2 rounded-lg text-sm border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 dark:hidden" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 hidden dark:block" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+                </svg>
+                <span id="themeText" class="dark:hidden">Dark Mode</span>
+                <span id="themeTextDark" class="hidden dark:block">Light Mode</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode functionality
+        const setDarkMode = () => {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        // Apply dark mode on page load
+        setDarkMode();
+
+        // Listen for changes to color scheme
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Password visibility toggle
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            const eyeOffIcon = document.getElementById('eyeOffIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.add('hidden');
+                eyeOffIcon.classList.remove('hidden');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('hidden');
+                eyeOffIcon.classList.add('hidden');
+            }
+        });
+
+        // Form validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let valid = true;
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            
+            // Reset error messages
+            emailError.textContent = '';
+            emailError.classList.add('hidden');
+            passwordError.textContent = '';
+            passwordError.classList.add('hidden');
+            
+            // Validate email
+            if (!email.value) {
+                emailError.textContent = 'Email is required';
+                emailError.classList.remove('hidden');
+                valid = false;
+            } else if (!/^\S+@\S+\.\S+$/.test(email.value)) {
+                emailError.textContent = 'Please enter a valid email address';
+                emailError.classList.remove('hidden');
+                valid = false;
+            }
+            
+            // Validate password
+            if (!password.value) {
+                passwordError.textContent = 'Password is required';
+                passwordError.classList.remove('hidden');
+                valid = false;
+            } else if (password.value.length < 6) {
+                passwordError.textContent = 'Password must be at least 6 characters';
+                passwordError.classList.remove('hidden');
+                valid = false;
+            }
+            
+            if (valid) {
+                // In a real application, you would submit the form or use AJAX
+                alert('Login successful! (This is just a demo)');
+            }
+        });
+    </script>
+</body>
+</html>,here is the dashboard:<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -618,584 +806,520 @@
 
   <script>
     // Sample data structure for demonstration
-const sampleData = {
-    dataType: "comprehensive",
-    department: "All Departments",
-    timestamp: new Date().toISOString(),
-    employees: [],
-    behaviorPatterns: {
+    const sampleData = {
+      dataType: "comprehensive",
+      department: "All Departments",
+      timestamp: new Date().toISOString(),
+      employees: [],
+      behaviorPatterns: {
         financial: 0,
         lifestyle: 0,
         secrecy: 0,
         vacation: 0,
         reporting: 0
-    },
-    psychosocialFactors: {
+      },
+      psychosocialFactors: {
         financialPressure: 0,
         personalGain: 0,
         jobDissatisfaction: 0,
         peerInfluence: 0
-    }
-};
+      }
+    };
 
-// Initialize the dashboard with empty state
-document.addEventListener('DOMContentLoaded', () => {
-    // Theme toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-        });
-    }
+    // Initialize the dashboard with empty state
+    document.addEventListener('DOMContentLoaded', () => {
+      // Theme toggle
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      });
 
-    // Initialize theme from localStorage
-    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      // Initialize theme from localStorage
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
-    }
+      }
 
-    // User role access
-    const userRole = localStorage.getItem('userRole');
-    const hrSection = document.getElementById('hrSection');
-    if (userRole === 'HR' && hrSection) {
-        hrSection.classList.remove('hidden');
-    } else if (userRole !== 'Auditor') {
-        window.location.href = 'index.html'; // Redirect to login if not logged in
-    }
+      // Dropdowns
+      document.getElementById('alertsDropdown').addEventListener('click', function() {
+        document.getElementById('alertsPanel').classList.toggle('hidden');
+      });
 
-    // Dropdowns
-    const alertsDropdown = document.getElementById('alertsDropdown');
-    if (alertsDropdown) {
-        alertsDropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const alertsPanel = document.getElementById('alertsPanel');
-            if (alertsPanel) alertsPanel.classList.toggle('hidden');
-        });
-    }
+      document.getElementById('userDropdown').addEventListener('click', function() {
+        document.getElementById('userPanel').classList.toggle('hidden');
+      });
 
-    const userDropdown = document.getElementById('userDropdown');
-    if (userDropdown) {
-        userDropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const userPanel = document.getElementById('userPanel');
-            if (userPanel) userPanel.classList.toggle('hidden');
-        });
-    }
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.relative')) {
+          document.getElementById('alertsPanel').classList.add('hidden');
+          document.getElementById('userPanel').classList.add('hidden');
+        }
+      });
 
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', (e) => {
-        const alertsPanel = document.getElementById('alertsPanel');
-        const userPanel = document.getElementById('userPanel');
+      // Employee search
+      document.getElementById('employeeSearch').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#employeeTableBody tr');
         
-        if (alertsPanel && !e.target.closest('#alertsDropdown')) {
-            alertsPanel.classList.add('hidden');
-        }
-        if (userPanel && !e.target.closest('#userDropdown')) {
-            userPanel.classList.add('hidden');
-        }
-    });
-
-    // Employee search
-    const employeeSearch = document.getElementById('employeeSearch');
-    if (employeeSearch) {
-        employeeSearch.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#employeeTableBody tr');
-            
-            rows.forEach(row => {
-                const nameCell = row.querySelector('td:first-child');
-                if (nameCell) {
-                    const name = nameCell.textContent.toLowerCase();
-                    row.style.display = name.includes(searchTerm) ? '' : 'none';
-                }
-            });
+        rows.forEach(row => {
+          const name = row.querySelector('td:first-child').textContent.toLowerCase();
+          row.style.display = name.includes(searchTerm) ? '' : 'none';
         });
-    }
+      });
 
-    // Department tabs
-    document.querySelectorAll('.tab-btn').forEach(tab => {
+      // Department tabs
+      document.querySelectorAll('.tab-btn').forEach(tab => {
         tab.addEventListener('click', function() {
-            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            filterEmployeesByDepartment(this.dataset.tab);
+          document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          filterEmployeesByDepartment(this.dataset.tab);
         });
+      });
+
+      // Export button
+      document.getElementById('exportBtn').addEventListener('click', () => {
+        showToast('Exporting dashboard data...', 'info');
+        // In a real app, this would generate and download a report
+        setTimeout(() => showToast('Report exported successfully', 'success'), 1500);
+      });
+
+      // Predictive analysis button
+      document.getElementById('predictiveBtn').addEventListener('click', runPredictiveAnalysis);
+      document.getElementById('refreshModelBtn').addEventListener('click', runPredictiveAnalysis);
+
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        showToast('You have been logged out', 'info');
+        // In a real app, this would redirect to login page
+      });
+
+      // Mark all alerts as read
+      document.getElementById('markAllRead').addEventListener('click', () => {
+        document.getElementById('alertCount').textContent = '0';
+        document.getElementById('alertsList').innerHTML = '<div class="p-4 text-center text-gray-500">No unread alerts</div>';
+        showToast('All alerts marked as read', 'success');
+      });
+
+      // Sidebar toggle for mobile
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
+      });
+      
+      sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+      });
+
+      // Initialize charts
+      initCharts();
+
+      // Check for any saved data
+      const savedData = localStorage.getItem('dashboardData');
+      if (savedData) {
+        processUploadedData(JSON.parse(savedData));
+      } else {
+        // Load with empty state
+        updateDashboard(sampleData);
+      }
     });
 
-    // Export button
-    const exportBtn = document.getElementById('exportBtn');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', () => {
-            showToast('Exporting dashboard data...', 'info');
-            setTimeout(() => showToast('Report exported successfully', 'success'), 1500);
-        });
-    }
-
-    // Predictive analysis buttons
-    const predictiveBtn = document.getElementById('predictiveBtn');
-    if (predictiveBtn) predictiveBtn.addEventListener('click', runPredictiveAnalysis);
-    
-    const refreshModelBtn = document.getElementById('refreshModelBtn');
-    if (refreshModelBtn) refreshModelBtn.addEventListener('click', runPredictiveAnalysis);
-
-    // Logout
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('userRole');
-            showToast('You have been logged out', 'info');
-            setTimeout(() => window.location.href = 'index.html', 1000);
-        });
-    }
-
-    // Mark all alerts as read
-    const markAllRead = document.getElementById('markAllRead');
-    if (markAllRead) {
-        markAllRead.addEventListener('click', () => {
-            const alertCount = document.getElementById('alertCount');
-            const alertsList = document.getElementById('alertsList');
-            if (alertCount) alertCount.textContent = '0';
-            if (alertsList) alertsList.innerHTML = '<div class="p-4 text-center text-gray-500">No unread alerts</div>';
-            showToast('All alerts marked as read', 'success');
-        });
-    }
-
-    // Sidebar toggle for mobile
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-    
-    if (sidebarToggle && sidebar && sidebarOverlay) {
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            sidebarOverlay.classList.toggle('active');
-        });
-        
-        sidebarOverlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            sidebarOverlay.classList.remove('active');
-        });
-    }
-
-    // Initialize charts
-    initCharts();
-
-    // Check for any saved data
-    const savedData = localStorage.getItem('dashboardData');
-    if (savedData) {
-        try {
-            processUploadedData(JSON.parse(savedData));
-        } catch (e) {
-            console.error('Error parsing saved data:', e);
-            updateDashboard(sampleData);
-        }
-    } else {
-        updateDashboard(sampleData);
-    }
-});
-
-function initCharts() {
-    const behaviorCtx = document.getElementById('behaviorChart');
-    if (behaviorCtx) {
-        window.behaviorChart = new Chart(behaviorCtx.getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Financial Discrepancies', 'Lifestyle Changes', 'Work Secrecy', 'Vacation Avoidance', 'Reporting Issues'],
-                datasets: [{
-                    data: [0, 0, 0, 0, 0],
-                    backgroundColor: ['#3B82F6', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 20
-                        }
-                    }
-                },
-                cutout: '70%'
+    function initCharts() {
+      // Behavioral Patterns Chart
+      const behaviorCtx = document.getElementById('behaviorChart').getContext('2d');
+      window.behaviorChart = new Chart(behaviorCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Financial Discrepancies', 'Lifestyle Changes', 'Work Secrecy', 'Vacation Avoidance', 'Reporting Issues'],
+          datasets: [{
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: [
+              '#3B82F6',
+              '#8B5CF6',
+              '#EC4899',
+              '#14B8A6',
+              '#F97316'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                usePointStyle: true,
+                padding: 20
+              }
             }
-        });
-    }
-}
-
-function processUploadedData(data) {
-    try {
-        const sourceEl = document.getElementById('dataSource');
-        if (sourceEl) {
-            sourceEl.textContent = `Data: ${data.dataType || 'Various'} (${data.department})`;
-            sourceEl.title = `Uploaded: ${new Date(data.timestamp).toLocaleString()}`;
+          },
+          cutout: '70%'
         }
+      });
+    }
+
+    // This function would be called when new data is uploaded
+    function processUploadedData(data) {
+      try {
+        // Update data source indicator
+        const sourceEl = document.getElementById('dataSource');
+        sourceEl.textContent = `Data: ${data.dataType || 'Various'} (${data.department})`;
+        sourceEl.title = `Uploaded: ${new Date(data.timestamp).toLocaleString()}`;
         
+        // Store the data in localStorage for persistence
         localStorage.setItem('dashboardData', JSON.stringify(data));
+        
+        // Update the dashboard with the new data
         updateDashboard(data);
+        
+        // Add to upload history
         addTimelineEvent(`Data Upload Processed`, `${data.dataType} data for ${data.department}`);
         
         showToast('Data processed successfully', 'success');
-    } catch (error) {
+      } catch (error) {
         console.error('Error processing data:', error);
         showToast('Error processing data', 'error');
+      }
     }
-}
 
-function updateDashboard(data) {
-    if (!data) return;
-    
-    updateRiskIndicators(data);
-    updateBehaviorChart(data.behaviorPatterns || {});
-    updatePsychosocialFactors(data.psychosocialFactors || {});
-    updateEmployeeTable(data.employees || []);
-    addTimelineEvent('Data Analysis Completed', 'Dashboard updated with latest data');
-}
+    function updateDashboard(data) {
+      // Update risk indicators
+      updateRiskIndicators(data);
+      
+      // Update behavioral patterns chart
+      updateBehaviorChart(data.behaviorPatterns);
+      
+      // Update psychosocial factors
+      updatePsychosocialFactors(data.psychosocialFactors);
+      
+      // Update employee table
+      updateEmployeeTable(data.employees);
+      
+      // Update timeline with processing event
+      addTimelineEvent('Data Analysis Completed', 'Dashboard updated with latest data');
+    }
 
-function updateRiskIndicators(data) {
-    let highRiskCount = 0, mediumRiskCount = 0, lowRiskCount = 0;
-    
-    if (data.employees && Array.isArray(data.employees)) {
+    function updateRiskIndicators(data) {
+      let highRiskCount = 0;
+      let mediumRiskCount = 0;
+      let lowRiskCount = 0;
+      
+      if (data.employees && data.employees.length > 0) {
         data.employees.forEach(employee => {
-            if (employee.riskLevel === 'high') highRiskCount++;
-            else if (employee.riskLevel === 'medium') mediumRiskCount++;
-            else lowRiskCount++;
+          if (employee.riskLevel === 'high') highRiskCount++;
+          else if (employee.riskLevel === 'medium') mediumRiskCount++;
+          else lowRiskCount++;
         });
+      }
+      
+      // Update the UI
+      document.querySelector('.high-risk-count').textContent = `${highRiskCount} Employees`;
+      document.querySelector('.medium-risk-count').textContent = `${mediumRiskCount} Employees`;
+      document.querySelector('.low-risk-count').textContent = `${lowRiskCount} Employees`;
     }
-    
-    const highRiskEl = document.querySelector('.high-risk-count');
-    const mediumRiskEl = document.querySelector('.medium-risk-count');
-    const lowRiskEl = document.querySelector('.low-risk-count');
-    
-    if (highRiskEl) highRiskEl.textContent = `${highRiskCount} Employees`;
-    if (mediumRiskEl) mediumRiskEl.textContent = `${mediumRiskCount} Employees`;
-    if (lowRiskEl) lowRiskEl.textContent = `${lowRiskCount} Employees`;
-}
 
-function updateBehaviorChart(patterns) {
-    if (window.behaviorChart) {
+    function updateBehaviorChart(patterns) {
+      if (window.behaviorChart) {
         window.behaviorChart.data.datasets[0].data = [
-            patterns.financial || 0,
-            patterns.lifestyle || 0,
-            patterns.secrecy || 0,
-            patterns.vacation || 0,
-            patterns.reporting || 0
+          patterns.financial || 0,
+          patterns.lifestyle || 0,
+          patterns.secrecy || 0,
+          patterns.vacation || 0,
+          patterns.reporting || 0
         ];
         window.behaviorChart.update();
+      }
     }
-}
 
-function updatePsychosocialFactors(factors) {
-    const setFactor = (id, value) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = value || 0;
-    };
-    
-    setFactor('financial-percent', factors.financialPressure);
-    setFactor('personal-percent', factors.personalGain);
-    setFactor('job-percent', factors.jobDissatisfaction);
-    setFactor('peer-percent', factors.peerInfluence);
-}
+    function updatePsychosocialFactors(factors) {
+      document.getElementById('financial-percent').textContent = factors.financialPressure || 0;
+      document.getElementById('personal-percent').textContent = factors.personalGain || 0;
+      document.getElementById('job-percent').textContent = factors.jobDissatisfaction || 0;
+      document.getElementById('peer-percent').textContent = factors.peerInfluence || 0;
+    }
 
-function updateEmployeeTable(employees) {
-    const tableBody = document.getElementById('employeeTableBody');
-    if (!tableBody) return;
-    
-    tableBody.innerHTML = '';
-    
-    if (!Array.isArray(employees) || employees.length === 0) {
+    function updateEmployeeTable(employees) {
+      const tableBody = document.getElementById('employeeTableBody');
+      tableBody.innerHTML = '';
+      
+      if (!employees || employees.length === 0) {
         tableBody.innerHTML = `
-            <tr>
-                <td colspan="6" class="text-center py-8 text-gray-500">
-                    No employee data available. Upload data in the HR section.
-                </td>
-            </tr>
+          <tr>
+            <td colspan="6" class="text-center py-8 text-gray-500">
+              No employee data available. Upload data in the HR section.
+            </td>
+          </tr>
         `;
         return;
-    }
-    
-    employees.forEach(employee => {
+      }
+      
+      employees.forEach(employee => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td class="table-cell">${employee.name || 'N/A'}</td>
-            <td class="table-cell">${employee.department || 'N/A'}</td>
-            <td class="table-cell">
-                <span class="risk-indicator risk-${employee.riskLevel || 'low'}"></span> 
-                ${(employee.riskLevel || 'low').charAt(0).toUpperCase() + (employee.riskLevel || 'low').slice(1)}
-            </td>
-            <td class="table-cell">
-                <div class="flex flex-wrap gap-1">
-                    ${(Array.isArray(employee.behaviors) ? employee.behaviors : []).map(behavior => 
-                        `<span class="behavior-tag behavior-${String(behavior).toLowerCase().replace(' ', '-')}">${behavior}</span>`
-                    ).join('')}
-                </div>
-            </td>
-            <td class="table-cell">${employee.lastActivity || 'N/A'}</td>
-            <td class="table-cell">
-                <button class="view-details-btn text-primary hover:underline" data-id="${employee.id || ''}">
-                    View
-                </button>
-            </td>
+          <td class="table-cell">${employee.name}</td>
+          <td class="table-cell">${employee.department}</td>
+          <td class="table-cell">
+            <span class="risk-indicator risk-${employee.riskLevel}"></span> 
+            ${employee.riskLevel.charAt(0).toUpperCase() + employee.riskLevel.slice(1)}
+          </td>
+          <td class="table-cell">
+            <div class="flex flex-wrap gap-1">
+              ${employee.behaviors.map(behavior => 
+                `<span class="behavior-tag behavior-${behavior.toLowerCase().replace(' ', '-')}">${behavior}</span>`
+              ).join('')}
+            </div>
+          </td>
+          <td class="table-cell">${employee.lastActivity || 'N/A'}</td>
+          <td class="table-cell">
+            <button class="view-details-btn text-primary hover:underline" data-id="${employee.id}">
+              View
+            </button>
+          </td>
         `;
         tableBody.appendChild(row);
-    });
-    
-    // Event listeners for view buttons
-    document.querySelectorAll('.view-details-btn').forEach(btn => {
+      });
+      
+      // Add event listeners to view buttons
+      document.querySelectorAll('.view-details-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            const employeeId = this.dataset.id;
-            showEmployeeDetails(employeeId);
+          const employeeId = this.dataset.id;
+          showEmployeeDetails(employeeId);
         });
-    });
-}
+      });
+    }
 
-function filterEmployeesByDepartment(department) {
-    const rows = document.querySelectorAll('#employeeTableBody tr');
-    if (!rows.length) return;
-    
-    if (!department || department === 'all') {
-        rows.forEach(row => {
-            row.style.display = '';
+    function filterEmployeesByDepartment(department) {
+      if (department === 'all') {
+        document.querySelectorAll('#employeeTableBody tr').forEach(row => {
+          row.style.display = '';
         });
         return;
+      }
+      
+      document.querySelectorAll('#employeeTableBody tr').forEach(row => {
+        const dept = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        row.style.display = dept.includes(department.toLowerCase()) ? '' : 'none';
+      });
     }
-    
-    rows.forEach(row => {
-        const deptCell = row.querySelector('td:nth-child(2)');
-        if (deptCell) {
-            const dept = deptCell.textContent.toLowerCase();
-            row.style.display = dept.includes(department.toLowerCase()) ? '' : 'none';
-        }
-    });
-}
 
-function showEmployeeDetails(employeeId) {
-    if (!employeeId) return;
-    showToast(`Showing details for employee ${employeeId}`, 'info');
-    // Here you would typically fetch more details or open a modal
-}
+    function showEmployeeDetails(employeeId) {
+      // In a real app, this would fetch detailed employee data
+      showToast(`Showing details for employee ${employeeId}`, 'info');
+    }
 
-function addTimelineEvent(title, description) {
-    const timeline = document.getElementById('activityTimeline');
-    if (!timeline) return;
-    
-    const timelineItem = document.createElement('div');
-    timelineItem.className = 'timeline-item medium';
-    timelineItem.innerHTML = `
-        <p class="font-medium">${title || 'Event'}</p>
-        <p class="text-sm text-gray-600 dark:text-gray-400">${description || ''}</p>
+    function addTimelineEvent(title, description) {
+      const timeline = document.getElementById('activityTimeline');
+      const timelineItem = document.createElement('div');
+      timelineItem.className = 'timeline-item medium';
+      timelineItem.innerHTML = `
+        <p class="font-medium">${title}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400">${description}</p>
         <p class="text-xs text-gray-500">Just now</p>
-    `;
-    timeline.insertBefore(timelineItem, timeline.firstChild);
-    
-    // Keep only the last 5 items
-    while (timeline.children.length > 5) {
+      `;
+      timeline.insertBefore(timelineItem, timeline.firstChild);
+      
+      // Keep only the last 5 items
+      while (timeline.children.length > 5) {
         timeline.removeChild(timeline.lastChild);
+      }
     }
-}
 
-function runPredictiveAnalysis() {
-    showToast('Running predictive analysis...', 'info');
-    
-    setTimeout(() => {
+    function runPredictiveAnalysis() {
+      showToast('Running predictive analysis...', 'info');
+      
+      // Simulate analysis delay
+      setTimeout(() => {
+        // Generate some sample results
         const analysisResults = {
-            topIndicators: {
-                financialPressure: Math.floor(Math.random() * 30) + 70,
-                vacationAvoidance: Math.floor(Math.random() * 30) + 50,
-                workSecrecy: Math.floor(Math.random() * 30) + 40,
-                lifestyleChanges: Math.floor(Math.random() * 30) + 30
+          topIndicators: {
+            financialPressure: Math.floor(Math.random() * 30) + 70,
+            vacationAvoidance: Math.floor(Math.random() * 30) + 50,
+            workSecrecy: Math.floor(Math.random() * 30) + 40,
+            lifestyleChanges: Math.floor(Math.random() * 30) + 30
+          },
+          potentialCases: [
+            {
+              name: 'Robert Johnson',
+              score: Math.floor(Math.random() * 30) + 70,
+              indicators: ['financial', 'secrecy'],
+              probability: Math.floor(Math.random() * 30) + 60
             },
-            potentialCases: [
-                {
-                    name: 'Robert Johnson',
-                    score: Math.floor(Math.random() * 30) + 70,
-                    indicators: ['financial', 'secrecy'],
-                    probability: Math.floor(Math.random() * 30) + 60
-                },
-                {
-                    name: 'Emily Davis',
-                    score: Math.floor(Math.random() * 30) + 50,
-                    indicators: ['vacation', 'lifestyle'],
-                    probability: Math.floor(Math.random() * 30) + 40
-                },
-                {
-                    name: 'Michael Chen',
-                    score: Math.floor(Math.random() * 30) + 40,
-                    indicators: ['reporting'],
-                    probability: Math.floor(Math.random() * 30) + 30
-                }
-            ]
+            {
+              name: 'Emily Davis',
+              score: Math.floor(Math.random() * 30) + 50,
+              indicators: ['vacation', 'lifestyle'],
+              probability: Math.floor(Math.random() * 30) + 40
+            },
+            {
+              name: 'Michael Chen',
+              score: Math.floor(Math.random() * 30) + 40,
+              indicators: ['reporting'],
+              probability: Math.floor(Math.random() * 30) + 30
+            }
+          ]
         };
         
         updatePredictiveAnalytics(analysisResults);
         addTimelineEvent('Predictive Analysis Completed', 'Updated risk predictions');
         showToast('Analysis completed successfully', 'success');
-    }, 2000);
-}
-
-function updatePredictiveAnalytics(results) {
-    if (!results) return;
-    
-    const setIndicator = (id, value) => {
-        const percentEl = document.getElementById(`${id}-correlation`);
-        const indicatorEl = document.getElementById(`${id}-indicator`);
-        if (percentEl) percentEl.textContent = value;
-        if (indicatorEl) indicatorEl.style.width = `${value}%`;
-    };
-    
-    if (results.topIndicators) {
-        setIndicator('financial', results.topIndicators.financialPressure);
-        setIndicator('vacation', results.topIndicators.vacationAvoidance);
-        setIndicator('secrecy', results.topIndicators.workSecrecy);
-        setIndicator('lifestyle', results.topIndicators.lifestyleChanges);
+      }, 2000);
     }
-    
-    const tableBody = document.getElementById('predictiveCasesBody');
-    if (!tableBody) return;
-    
-    tableBody.innerHTML = '';
-    
-    if (Array.isArray(results.potentialCases)) {
-        results.potentialCases.forEach(caseData => {
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-gray-50 dark:hover:bg-gray-750';
-            row.innerHTML = `
-                <td class="table-cell">${caseData.name || 'N/A'}</td>
-                <td class="table-cell">
-                    <div class="flex items-center">
-                        <span class="risk-indicator ${
-                            caseData.score >= 70 ? 'risk-high' : 
-                            caseData.score >= 40 ? 'risk-medium' : 'risk-low'
-                        }"></span> ${caseData.score || 0}/100
-                    </div>
-                </td>
-                <td class="table-cell">
-                    <div class="flex flex-wrap gap-1">
-                        ${(Array.isArray(caseData.indicators) ? caseData.indicators : []).map(ind => 
-                            `<span class="behavior-tag behavior-${ind}">${
-                                ind.charAt(0).toUpperCase() + ind.slice(1)
-                            }</span>`
-                        ).join('')}
-                    </div>
-                </td>
-                <td class="table-cell">${caseData.probability || 0}%</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    }
-}
 
-function showToast(message, type = 'info') {
-    const toastContainer = document.getElementById('toastContainer');
-    if (!toastContainer) return;
-    
-    const toast = document.createElement('div');
-    toast.className = `bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 flex items-start border-l-4 ${
+    function updatePredictiveAnalytics(results) {
+      // Update top risk indicators
+      document.getElementById('financial-correlation').textContent = results.topIndicators.financialPressure;
+      document.getElementById('financial-indicator').style.width = `${results.topIndicators.financialPressure}%`;
+      
+      document.getElementById('vacation-correlation').textContent = results.topIndicators.vacationAvoidance;
+      document.getElementById('vacation-indicator').style.width = `${results.topIndicators.vacationAvoidance}%`;
+      
+      document.getElementById('secrecy-correlation').textContent = results.topIndicators.workSecrecy;
+      document.getElementById('secrecy-indicator').style.width = `${results.topIndicators.workSecrecy}%`;
+      
+      document.getElementById('lifestyle-correlation').textContent = results.topIndicators.lifestyleChanges;
+      document.getElementById('lifestyle-indicator').style.width = `${results.topIndicators.lifestyleChanges}%`;
+      
+      // Update potential cases table
+      const tableBody = document.getElementById('predictiveCasesBody');
+      tableBody.innerHTML = '';
+      
+      results.potentialCases.forEach(caseData => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 dark:hover:bg-gray-750';
+        row.innerHTML = `
+          <td class="table-cell">${caseData.name}</td>
+          <td class="table-cell">
+            <div class="flex items-center">
+              <span class="risk-indicator ${
+                caseData.score >= 70 ? 'risk-high' : 
+                caseData.score >= 40 ? 'risk-medium' : 'risk-low'
+              }"></span> ${caseData.score}/100
+            </div>
+          </td>
+          <td class="table-cell">
+            <div class="flex flex-wrap gap-1">
+              ${caseData.indicators.map(ind => 
+                `<span class="behavior-tag behavior-${ind}">${
+                  ind.charAt(0).toUpperCase() + ind.slice(1)
+                }</span>`
+              ).join('')}
+            </div>
+          </td>
+          <td class="table-cell">${caseData.probability}%</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function showToast(message, type = 'info') {
+      const toastContainer = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 flex items-start border-l-4 ${
         type === 'success' ? 'border-green-500' : 
         type === 'error' ? 'border-red-500' : 
         type === 'warning' ? 'border-yellow-500' : 'border-blue-500'
-    }`;
-    
-    let icon;
-    if (type === 'success') icon = 'fa-check-circle text-green-500';
-    else if (type === 'error') icon = 'fa-exclamation-circle text-red-500';
-    else if (type === 'warning') icon = 'fa-exclamation-triangle text-yellow-500';
-    else icon = 'fa-info-circle text-blue-500';
-    
-    toast.innerHTML = `
+      }`;
+      
+      let icon;
+      if (type === 'success') icon = 'fa-check-circle text-green-500';
+      else if (type === 'error') icon = 'fa-exclamation-circle text-red-500';
+      else if (type === 'warning') icon = 'fa-exclamation-triangle text-yellow-500';
+      else icon = 'fa-info-circle text-blue-500';
+      
+      toast.innerHTML = `
         <i class="fas ${icon} mr-3 mt-1"></i>
         <div class="flex-1">
-            <p class="text-sm font-medium">${message}</p>
+          <p class="text-sm font-medium">${message}</p>
         </div>
         <button class="ml-4 text-gray-400 hover:text-gray-500">
-            <i class="fas fa-times"></i>
+          <i class="fas fa-times"></i>
         </button>
-    `;
-    
-    const closeBtn = toast.querySelector('button');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            toast.remove();
-        });
-    }
-    
-    toastContainer.appendChild(toast);
-    
-    setTimeout(() => {
+      `;
+      
+      const closeBtn = toast.querySelector('button');
+      closeBtn.addEventListener('click', () => {
         toast.remove();
-    }, 5000);
-}
+      });
+      
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 5000);
+    }
 
-// For demonstration: simulate loading some data after 2 seconds
-setTimeout(() => {
-    const demoData = {
+    // For demonstration: simulate loading some data after 2 seconds
+    setTimeout(() => {
+      const demoData = {
         dataType: "comprehensive",
         department: "All Departments",
         timestamp: new Date().toISOString(),
         employees: [
-            {
-                id: "emp-1001",
-                name: "John Linglong",
-                department: "Finance",
-                riskLevel: "high",
-                behaviors: ["Financial", "Secrecy"],
-                lastActivity: "2 hours ago"
-            },
-            {
-                id: "emp-1002",
-                name: "Sarah Johnson",
-                department: "HR",
-                riskLevel: "medium",
-                behaviors: ["Vacation", "Reporting"],
-                lastActivity: "5 hours ago"
-            },
-            {
-                id: "emp-1003",
-                name: "Mike Williams",
-                department: "Procurement",
-                riskLevel: "high",
-                behaviors: ["Secrecy", "Lifestyle"],
-                lastActivity: "8 hours ago"
-            },
-            {
-                id: "emp-1004",
-                name: "Lisa Brown",
-                department: "Finance",
-                riskLevel: "medium",
-                behaviors: ["Vacation", "Financial"],
-                lastActivity: "1 day ago"
-            },
-            {
-                id: "emp-1005",
-                name: "David Wilson",
-                department: "IT",
-                riskLevel: "low",
-                behaviors: ["Reporting"],
-                lastActivity: "2 days ago"
-            }
+          {
+            id: "emp-1001",
+            name: "John Linglong",
+            department: "Finance",
+            riskLevel: "high",
+            behaviors: ["Financial", "Secrecy"],
+            lastActivity: "2 hours ago"
+          },
+          {
+            id: "emp-1002",
+            name: "Sarah Johnson",
+            department: "HR",
+            riskLevel: "medium",
+            behaviors: ["Vacation", "Reporting"],
+            lastActivity: "5 hours ago"
+          },
+          {
+            id: "emp-1003",
+            name: "Mike Williams",
+            department: "Procurement",
+            riskLevel: "high",
+            behaviors: ["Secrecy", "Lifestyle"],
+            lastActivity: "8 hours ago"
+          },
+          {
+            id: "emp-1004",
+            name: "Lisa Brown",
+            department: "Finance",
+            riskLevel: "medium",
+            behaviors: ["Vacation", "Financial"],
+            lastActivity: "1 day ago"
+          },
+          {
+            id: "emp-1005",
+            name: "David Wilson",
+            department: "IT",
+            riskLevel: "low",
+            behaviors: ["Reporting"],
+            lastActivity: "2 days ago"
+          }
         ],
         behaviorPatterns: {
-            financial: 32.6,
-            lifestyle: 74.4,
-            secrecy: 76.7,
-            vacation: 58.1,
-            reporting: 41.9
+          financial: 32.6,
+          lifestyle: 74.4,
+          secrecy: 76.7,
+          vacation: 58.1,
+          reporting: 41.9
         },
         psychosocialFactors: {
-            financialPressure: 69.8,
-            personalGain: 14.0,
-            jobDissatisfaction: 7.0,
-            peerInfluence: 4.7
+          financialPressure: 69.8,
+          personalGain: 14.0,
+          jobDissatisfaction: 7.0,
+          peerInfluence: 4.7
         }
-    };
-    
-    processUploadedData(demoData);
-    runPredictiveAnalysis();
-}, 2000);
-    <script/>
-  <body/>
-<html/>
-    // Sample data structure for demonstration
-
-
+      };
+      
+      processUploadedData(demoData);
+      runPredictiveAnalysis();
+    }, 2000);
+  </script>
+</body>
+            </html>
