@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HR Data Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .file-drop-area {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      text-align: center;
+      padding: 30px;
+      transition: all 0.3s;
+    }
+    
+    .file-drop-area.dragging {
+      background-color: #f0f9ff;
+      border-color: #5D5CDE;
+    }
+    
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 50;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .progress {
+      height: 6px;
+      background-color: #e5e7eb;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background-color: #5D5CDE;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">HR Data Management</h1>
+        <div class="flex items-center space-x-4">
+          <button id="notificationsBtn" class="relative p-2 rounded-full hover:bg-gray-200">
+            <i class="fas fa-bell"></i>
+            <span id="notificationCount" class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+          </button>
+          <div class="flex items-center space-x-2">
+            <img class="w-8 h-8 rounded-full" src="https://picsum.photos/200" alt="User avatar">
+            <span class="font-medium">HR Manager</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-6">
+      <!-- Upload Section -->
+      <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Upload Employee Data</h2>
+        
+        <div class="mb-6">
+          <div class="file-drop-area" id="dropArea">
+            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+            <p class="font-medium mb-2">Drag and drop files here or click to browse</p>
+            <p class="text-sm text-gray-500 mb-4">Supports CSV, XLSX formats</p>
+            <label class="inline-block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition cursor-pointer">
+              <input type="file" id="fileInput" class="hidden" multiple accept=".csv,.xlsx">
+              <i class="fas fa-folder-open mr-2"></i> Browse Files
+            </label>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-lg font-medium mb-3">Data Type</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-colors cursor-pointer data-type-option">
+              <input type="radio" name="dataType" id="loginLogout" value="loginLogout" class="hidden" checked>
+              <label for="loginLogout" class="flex items-start cursor-pointer">
+                <div class="p-2 rounded-full bg-blue-100 text-blue-600 mr-3">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">Login/Logout Times</h4>
+                  <p class="text-sm text-gray-600 mt-1">Employee system access patterns</p>
+                </div>
+              </label>
+            </div>
+            
+            <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-colors cursor-pointer data-type-option">
+              <input type="radio" name="dataType" id="lifestyle" value="lifestyle" class="hidden">
+              <label for="lifestyle" class="flex items-start cursor-pointer">
+                <div class="p-2 rounded-full bg-purple-100 text-purple-600 mr-3">
+                  <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">Lifestyle Data</h4>
+                  <p class="text-sm text-gray-600 mt-1">Employee lifestyle and spending patterns</p>
+                </div>
+              </label>
+            </div>
+            
+            <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-colors cursor-pointer data-type-option">
+              <input type="radio" name="dataType" id="payData" value="payData" class="hidden">
+              <label for="payData" class="flex items-start cursor-pointer">
+                <div class="p-2 rounded-full bg-green-100 text-green-600 mr-3">
+                  <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">Pay Data</h4>
+                  <p class="text-sm text-gray-600 mt-1">Employee compensation and payroll data</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <button id="uploadBtn" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition flex items-center justify-center">
+          <i class="fas fa-upload mr-2"></i> Upload Data
+        </button>
+      </div>
+
+      <!-- Notifications Panel -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">System Notifications</h2>
+          <button class="text-sm text-blue-600 hover:underline" id="markAllRead">Mark all as read</button>
+        </div>
+        
+        <div class="space-y-4" id="notificationsList">
+          <div class="p-3 border-b border-gray-200 hover:bg-gray-50 transition">
+            <div class="flex items-center">
+              <span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
+              <span class="font-medium">New Fraud Risk Detected</span>
+            </div>
+            <p class="text-sm text-gray-600 mt-1">Employee #4572 shows high-risk login patterns</p>
+            <div class="flex justify-between items-center mt-2 text-xs">
+              <span class="text-gray-500">10 min ago</span>
+              <button class="text-blue-600 hover:underline">View Details</button>
+            </div>
+          </div>
+          
+          <div class="p-3 border-b border-gray-200 hover:bg-gray-50 transition">
+            <div class="flex items-center">
+              <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
+              <span class="font-medium">Data Processing Complete</span>
+            </div>
+            <p class="text-sm text-gray-600 mt-1">Lifestyle data from May 2025 has been analyzed</p>
+            <div class="flex justify-between items-center mt-2 text-xs">
+              <span class="text-gray-500">1 hour ago</span>
+              <button class="text-blue-600 hover:underline">View Report</button>
+            </div>
+          </div>
+          
+          <div class="p-3 hover:bg-gray-50 transition">
+            <div class="flex items-center">
+              <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
+              <span class="font-medium">System Update Available</span>
+            </div>
+            <p class="text-sm text-gray-600 mt-1">New version 1.2.0 ready to install</p>
+            <div class="flex justify-between items-center mt-2 text-xs">
+              <span class="text-gray-500">2 days ago</span>
+              <button class="text-blue-600 hover:underline">Update Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-4">
+      <div class="container mx-auto px-4 text-center text-sm text-gray-600">
+        <p>HR Data Management System v1.0</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Upload Progress Modal -->
+  <div id="uploadModal" class="modal">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <h3 class="text-lg font-semibold mb-4">Uploading Data</h3>
+      <div class="mb-6">
+        <div class="flex justify-between mb-1">
+          <span class="text-sm font-medium">Upload Progress</span>
+          <span class="text-sm" id="uploadPercent">0%</span>
+        </div>
+        <div class="progress mb-4">
+          <div class="progress-bar" id="uploadProgressBar" style="width: 0%"></div>
+        </div>
+      </div>
+      
+      <div class="mb-4 text-sm text-gray-600">
+        <p id="statusMessage">Preparing to upload files...</p>
+      </div>
+      
+      <div class="flex justify-end">
+        <button id="cancelUploadBtn" class="border border-gray-300 hover:bg-gray-100 py-2 px-4 rounded-lg transition">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // File drop area functionality
+      const dropArea = document.getElementById('dropArea');
+      const fileInput = document.getElementById('fileInput');
+      
+      // Prevent default drag behaviors
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      // Highlight drop area when drag over it
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight() {
+        dropArea.classList.add('dragging');
+      }
+
+      function unhighlight() {
+        dropArea.classList.remove('dragging');
+      }
+
+      // Handle dropped files
+      dropArea.addEventListener('drop', handleDrop, false);
+
+      function handleDrop(e) {
+        const files = e.dataTransfer.files;
+        fileInput.files = files;
+        handleFiles(files);
+      }
+
+      // Also handle manually selected files
+      fileInput.addEventListener('change', function() {
+        handleFiles(this.files);
+      });
+
+      function handleFiles(files) {
+        if (files.length > 0) {
+          showToast(`${files.length} file(s) selected for upload`, 'success');
+        }
+      }
+
+      // Data type selection
+      document.querySelectorAll('.data-type-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.data-type-option').forEach(opt => {
+            opt.classList.remove('border-blue-500');
+            opt.querySelector('input[type="radio"]').checked = false;
+          });
+          
+          this.classList.add('border-blue-500');
+          this.querySelector('input[type="radio"]').checked = true;
+        });
+      });
+
+      // Upload button click
+      document.getElementById('uploadBtn').addEventListener('click', function() {
+        const files = fileInput.files;
+        if (files.length === 0) {
+          showToast('Please select files to upload', 'error');
+          return;
+        }
+        
+        const dataType = document.querySelector('input[name="dataType"]:checked').value;
+        const modal = document.getElementById('uploadModal');
+        modal.classList.add('active');
+        
+        // Simulate upload
+        simulateUpload(dataType, files);
+      });
+
+      // Cancel upload
+      document.getElementById('cancelUploadBtn').addEventListener('click', function() {
+        const modal = document.getElementById('uploadModal');
+        modal.classList.remove('active');
+        showToast('Upload cancelled', 'info');
+      });
+
+      // Mark all notifications as read
+      document.getElementById('markAllRead').addEventListener('click', function() {
+        document.getElementById('notificationCount').textContent = '0';
+        showToast('All notifications marked as read', 'success');
+      });
+    });
+
+    function simulateUpload(dataType, files) {
+      let uploadProgress = 0;
+      const uploadBar = document.getElementById('uploadProgressBar');
+      const uploadPercent = document.getElementById('uploadPercent');
+      const statusMessage = document.getElementById('statusMessage');
+      
+      // Get human-readable data type name
+      let dataTypeName = '';
+      switch(dataType) {
+        case 'loginLogout': dataTypeName = 'Login/Logout Times'; break;
+        case 'lifestyle': dataTypeName = 'Lifestyle Data'; break;
+        case 'payData': dataTypeName = 'Pay Data'; break;
+      }
+      
+      statusMessage.textContent = `Uploading ${files.length} ${dataTypeName} file(s)...`;
+      
+      // Upload progress simulation
+      const uploadInterval = setInterval(() => {
+        uploadProgress += 5;
+        uploadBar.style.width = `${uploadProgress}%`;
+        uploadPercent.textContent = `${uploadProgress}%`;
+        
+        if (uploadProgress >= 100) {
+          clearInterval(uploadInterval);
+          statusMessage.textContent = 'Upload complete! Analyzing data...';
+          
+          // Close modal after a delay
+          setTimeout(() => {
+            document.getElementById('uploadModal').classList.remove('active');
+            
+            // Create a notification about the upload
+            const notificationCount = document.getElementById('notificationCount');
+            notificationCount.textContent = parseInt(notificationCount.textContent) + 1;
+            
+            const notificationsList = document.getElementById('notificationsList');
+            const newNotification = document.createElement('div');
+            newNotification.className = 'p-3 border-b border-gray-200 hover:bg-gray-50 transition';
+            newNotification.innerHTML = `
+              <div class="flex items-center">
+                <span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span>
+                <span class="font-medium">Data Upload Complete</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">${files.length} ${dataTypeName} file(s) uploaded and processed</p>
+              <div class="flex justify-between items-center mt-2 text-xs">
+                <span class="text-gray-500">Just now</span>
+                <button class="text-blue-600 hover:underline">View</button>
+              </div>
+            `;
+            notificationsList.insertBefore(newNotification, notificationsList.firstChild);
+            
+            showToast('Data successfully uploaded and processed', 'success');
+          }, 1500);
+        }
+      }, 100);
+    }
+
+    function showToast(message, type = 'info') {
+      const toastContainer = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `bg-white shadow-md rounded-lg p-4 flex items-start border-l-4 ${
+        type === 'success' ? 'border-green-500' : 
+        type === 'error' ? 'border-red-500' : 'border-blue-500'
+      }`;
+      
+      let icon;
+      if (type === 'success') icon = 'fa-check-circle text-green-500';
+      else if (type === 'error') icon = 'fa-exclamation-circle text-red-500';
+      else icon = 'fa-info-circle text-blue-500';
+      
+      toast.innerHTML = `
+        <i class="fas ${icon} mr-3 mt-1"></i>
+        <div class="flex-1">
+          <p class="text-sm font-medium">${message}</p>
+        </div>
+        <button class="ml-4 text-gray-400 hover:text-gray-500">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      const closeBtn = toast.querySelector('button');
+      closeBtn.addEventListener('click', () => {
+        toast.remove();
+      });
+      
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
