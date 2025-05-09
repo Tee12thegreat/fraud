@@ -650,6 +650,17 @@
       if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
       }
+      () => {
+      const userRole = localStorage.getItem('userRole');
+      if (userRole === 'HR') {
+          document.getElementById('hrSection').classList.remove('hidden');
+      } else if (userRole === 'Auditor') {
+          // Auditor has access to everything
+      } else {
+          window.location.href = 'index.html'; // Redirect to login if not logged in
+      }
+    });
+  
 
       // Dropdowns
       document.getElementById('alertsDropdown').addEventListener('click', function() {
