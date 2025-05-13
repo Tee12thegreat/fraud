@@ -353,6 +353,9 @@
           </li>
         </ul>
       </nav>
+      <button onclick="logout()" class="text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded">
+          Logout
+      </button>
     </div>
 
     <!-- Main Content Area -->
@@ -724,6 +727,14 @@
   </div>
 
   <script>
+    // Check if user is authenticated on page load
+  document.addEventListener("DOMContentLoaded", function () {
+    const userRole = localStorage.getItem("userRole");
+    if (!userRole) {
+      // Redirect to login if not authenticated
+      window.location.href = "login.html"; // Ensure this matches your login page filename
+    }
+  });
     // Sample data structure for demonstration
     const sampleData = {
       dataType: "comprehensive",
@@ -785,7 +796,7 @@
         const rows = document.querySelectorAll('#employeeTableBody tr');
         
         rows.forEach(row => {
-            if(row.const name = row.querySelector('td:first-child').textContent.toLowerCase();
+          const name = row.querySelector('td:first-child').textContent.toLowerCase();
           row.style.display = name.includes(searchTerm) ? '' : 'none';
         });
       });
@@ -939,6 +950,10 @@
       
       // Update timeline with processing event
       addTimelineEvent('Data Analysis Completed', 'Dashboard updated with latest data');
+    }
+    function logout() {
+    localStorage.removeItem('userRole'); // Clear session
+    window.location.href = 'login.html'; // Redirect to login
     }
 
     function updateRiskIndicators(data) {
@@ -1367,4 +1382,3 @@
   </script>
 </body>
 </html>
-        

@@ -81,22 +81,23 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+          document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-            // Simulated user authentication
-            const user = (email === 'hr@example.com' && password === 'hrpass') ? 'HR' :
-                         (email === 'auditor@example.com' && password === 'auditpass') ? 'Auditor' : null;
+    // Simulated user authentication
+    const user = (email === 'hr@example.com' && password === 'hrpass') ? 'HR' :
+                 (email === 'auditor@example.com' && password === 'auditpass') ? 'Auditor' : null;
 
-            if (user) {
-                localStorage.setItem('userRole', user);
-                window.location.href = 'dashboard.html'; // Redirect to dashboard
-            } else {
-                alert('Invalid credentials!'); // Handle invalid login
-            }
-        });
+    if (user) {
+      localStorage.setItem('userRole', user); // Store role
+      window.location.href = 'index.html'; // Redirect to dashboard
+    } else {
+      localStorage.removeItem('userRole'); // Clear invalid session
+      alert('Invalid credentials!'); // Handle invalid login
+    }
+  });
     </script>
 </body>
 </html>
